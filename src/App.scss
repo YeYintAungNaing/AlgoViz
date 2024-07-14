@@ -1,0 +1,44 @@
+.app{
+    display: flex;
+    align-items: center;
+
+    .gridContainer{
+        display: grid;
+        grid-template-rows: repeat(10, 1fr);
+        grid-template-columns: repeat(10, 1fr);
+        gap: 1px;
+
+
+        .grid-item{
+            width: 40px;
+            height: 40px;
+            border: 1px solid #e1d8d8;    
+        }
+        .grid-item.unvisited{
+            background-color: rgb(148, 238, 238);
+        } 
+
+
+        .grid-item.startPoint{
+            background-color: rgb(3, 254, 133);
+        }
+
+        .grid-item.endPoint{
+            background-color: rgb(189, 16, 16);
+        }
+
+        .grid-item.wall{
+            background-color: rgb(35, 32, 35);
+        }
+
+        .grid-item.visited{
+            background-color: blueviolet;
+        }
+
+        .grid-item.path{
+            background-color: rgb(191, 197, 26);
+        }
+
+
+    }
+}
