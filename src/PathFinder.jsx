@@ -15,6 +15,16 @@ function PathFinder() {
   const [speed, setSpeed] = useState(30)
   // const pointsRef = useRef({});  
 
+
+
+  // TODO 
+  // hold down mouse to make wall
+  // fix maze generating algorithm
+  // start and end point position fix for various grid size
+  // allow use to move start and end points
+  // add more path finding algorithms
+
+
   const START_X = 3;
   const START_Y = 3;
   const END_X = 13;
