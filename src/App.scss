@@ -1,44 +1,95 @@
 .app{
     display: flex;
     align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    margin: 0;
+    background-color: #eeeff0;
 
-    .gridContainer{
-        display: grid;
-        grid-template-rows: repeat(10, 1fr);
-        grid-template-columns: repeat(10, 1fr);
-        gap: 1px;
+   button{
+        display: inline-block;
+        outline: 0;
+        border: 0;
+        cursor: pointer;
+        background: #FCFCFD;
+        box-shadow: 0px 2px 4px rgb(45 35 66 / 40%), 0px 7px 13px -3px rgb(45 35 66 / 30%), inset 0px -3px 0px #d6d6e7;
+        height: 48px;
+        padding: 5px;
+        font-size: 16px;
+        border-radius: 6px;
+        color: #36395a;
+   }
+    
+
+    .setting{
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+        border: solid 0.1mm gray ;
+        border-radius: 10px;
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;
+        height: 100vh;
+        background-color: rgb(219, 235, 227);
+        
+    }
+
+    .interface{
+        flex: 5;
+        display: flex;
+        height: 100vh;
+        flex-direction: column;
+        
+        align-items: center;  
+        background-color: rgb(219, 235, 227);
+        border: solid 0.1mm gray ;
+        border-radius: 10px;
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;
+        
 
 
-        .grid-item{
-            width: 40px;
-            height: 40px;
-            border: 1px solid #e1d8d8;    
+        .message{
+            
         }
-        .grid-item.unvisited{
-            background-color: rgb(148, 238, 238);
-        } 
 
 
-        .grid-item.startPoint{
-            background-color: rgb(3, 254, 133);
+        .gridContainer{
+            display: grid;
+            gap: 1px;
+            margin-top: 10px;
+            
+            .grid-item{
+    
+                border: 1.5px solid #e1d8d8;
+                
+            }
+
+            .grid-item.unvisited{
+                background-color:#FCFCFD;
+            } 
+
+            .grid-item.startPoint{
+                background-color: rgb(0, 255, 0);
+            }
+
+            .grid-item.endPoint{
+                background-color: rgb(189, 16, 16);
+            }
+
+            .grid-item.wall{
+                background-color: rgb(0, 0, 0);
+            }
+
+            .grid-item.visited{
+                background-color: rgb(55, 59, 59);
+            }
+
+            .grid-item.path{
+                background-color: rgb(191, 197, 26);
+            }
         }
-
-        .grid-item.endPoint{
-            background-color: rgb(189, 16, 16);
-        }
-
-        .grid-item.wall{
-            background-color: rgb(35, 32, 35);
-        }
-
-        .grid-item.visited{
-            background-color: blueviolet;
-        }
-
-        .grid-item.path{
-            background-color: rgb(191, 197, 26);
-        }
-
-
     }
 }

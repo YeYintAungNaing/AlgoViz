@@ -55,18 +55,33 @@ function getRecursiveWalls(grid, columnIndices, rowIndices, startPoint, endPoint
 }
 
 
-function getRandomOddNumberForDivision(range) {  
+/* function getRandomOddNumberForDivision(range) {  
   let max = range.length - 1   
   let randomIndex = Math.floor(Math.random() * max);
   if (randomIndex % 2 === 0) {
     randomIndex = (randomIndex + 1) % max; 
   }
   return range[randomIndex];
-}
+} */
+
+  function getRandomOddNumberForDivision(array) {
+    let max = array.length - 1;
+    let randomNum =
+      Math.floor(Math.random() * (max / 2)) +
+      Math.floor(Math.random() * (max / 2));
+    if (randomNum % 2 === 0) {
+      if (randomNum === max) {
+        randomNum -= 1;
+      } else {
+        randomNum += 1;
+      }
+    }
+    return array[randomNum];
+  }
 
 
 function addWall(verticalWall, randomNum, rowIndices, columnIndices, startPoint, endPoint) {
-  let isStartEnd; // to check whether the current cell overlaps with start/end point
+  let isStartEnd = false // to check whether the current cell overlaps with start/end point
   let tempWalls = [];
 
   if (verticalWall) {    
@@ -75,7 +90,7 @@ function addWall(verticalWall, randomNum, rowIndices, columnIndices, startPoint,
     for (let index of rowIndices) {    // looping each row in the grid board
       if (
         index === startPoint.row && randomNum === startPoint.col || 
-        index === endPoint.row && randomNum === startPoint.col
+        index === endPoint.row && randomNum === endPoint.col
       ) {
         isStartEnd = true;
         continue
@@ -109,10 +124,24 @@ function addWall(verticalWall, randomNum, rowIndices, columnIndices, startPoint,
 }
 
 
-function getRandomOddNumber(range) {
+/* function getRandomOddNumber(range) {
   let randomIndex = Math.floor(Math.random() * range.length);
   if (randomIndex % 2 === 0) {
     randomIndex = (randomIndex + 1) % range.length; 
   }
-  return range[randomIndex];
-}
+  return randomIndex;
+} */
+
+  function getRandomOddNumber(max) {
+    let randomNum =
+      Math.floor(Math.random() * (max / 2)) +
+      Math.floor(Math.random() * (max / 2));
+    if (randomNum % 2 !== 0) {
+      if (randomNum === max) {
+        randomNum -= 1;
+      } else {
+        randomNum += 1;
+      }
+    }
+    return randomNum;
+  }
