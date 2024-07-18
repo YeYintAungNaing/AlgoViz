@@ -3,44 +3,41 @@ import './App.scss'
 import Point from './components/Point';
 import  {dijkstra, sortedShortestPoints}  from './algorithms/Dijkstra.js';
 import { recursiveDivision } from './mazeGenerators/recursiveDivision.js';
+import { scuffedWalls } from './mazeGenerators/scuffedWalls.js';
+
 
 function PathFinder() {
 
   const [grid, setGrid] =  useState([]);
-  const [rowCount, setRowCount] = useState(25);
-  const [columnCount, setColumnCount] = useState(40);
-  const [cellSize, setCellSize] = useState(25)
+  //const [gridStats, setGridStats] = useState({rowCount : 25, columnCount : 40, cellSize : 25 })
+  //const [coordinates, setCoordinates] = useState ({START_X : 3, START_Y : 3, END_X : 21, END_Y : 36})
+  const [gridStats, setGridStats] = useState({rowCount : 8, columnCount : 8, cellSize : 40 })
+  const [coordinates, setCoordinates] = useState ({START_X : 1, START_Y : 1, END_X : 6, END_Y : 6})
+  const [isAnimating, setIsAnimating] = useState(false)
   const [gridLoaded, setGridLoaded] = useState(false)
   const [message, setMessage] = useState("Select the desired algorithm and find the path")
   const [speed, setSpeed] = useState(30)
+
   // const pointsRef = useRef({});  
-
-
 
   // TODO 
   // hold down mouse to make wall
-  // fix maze generating algorithm
-  // start and end point position fix for various grid size
   // allow use to move start and end points
   // add more path finding algorithms
 
 
-  const START_X = 3;
-  const START_Y = 3;
-  const END_X = 13;
-  const END_Y = 24;
-
-
   useEffect(()=>{
+    if (!gridLoaded){
+      setIsAnimating(true)
       initializeGrid()
-      setGridLoaded(true)
-      console.log('useEffect')
+      //console.log('useEffect')
+    }
   }, [gridLoaded])
 
 
  function handleClick(row, col) {
 
-    if (row === START_X && col === START_Y || row === END_X && col === END_Y ) {
+    if (row === coordinates.START_X && col === coordinates.START_Y || row === coordinates.END_X && col === coordinates.END_Y ) {
       movePoint(row , col)
     }
     else{
@@ -50,7 +47,7 @@ function PathFinder() {
 
 
   function movePoint(row, col) {
-    console.log('start or end')
+    console.log('start or end', row, col)
   }
 
 
@@ -67,8 +64,8 @@ function PathFinder() {
     return {
       row : row,
       col : col,
-      isStart : row === START_X && col === START_Y,
-      isEnd : row === END_X && col === END_Y,
+      isStart : row === coordinates.START_X && col === coordinates.START_Y,
+      isEnd : row === coordinates.END_X && col === coordinates.END_Y,
       distance : Infinity,
       visited : false,
       isWall : false,
@@ -78,39 +75,73 @@ function PathFinder() {
   }
 
   //console.log("rendered")
+  //console.log(grid)
 
   function initializeGrid() {     
       const copyGrid = []
-      for (let row=0; row<rowCount ; row++){
+      for (let row=0; row < gridStats.rowCount ; row++){
         const currentRow = []
-        for (let col=0; col<columnCount ; col++){
+        for (let col=0; col < gridStats.columnCount ; col++){
           currentRow.push(createPoint(row, col))
         }
         copyGrid.push(currentRow)
       }
       setGrid(copyGrid)
+      setGridLoaded(true)
+      setIsAnimating(false)
+  }
+
+  function generateScuffedWalls(e) {
+    e.preventDefault()
+    let success = toogleUpdatingState()
+    if (success) {
+      const startPoint = grid[coordinates.START_X][coordinates.START_Y]
+      const endPoint = grid[coordinates.END_X][coordinates.END_Y]
+      let randomWalls = scuffedWalls(grid, startPoint, endPoint)
+      //console.log(randomWalls)
+      animateWallGeneration(randomWalls)
+    }
   }
 
 
-  function generateRecursiveDivisionMaze() {
-    const startPoint = grid[START_X][START_Y]
-    const endPoint = grid[END_X][END_Y]
-    const generatedWalls = recursiveDivision(grid, startPoint, endPoint)
-    setGridLoaded(false)  // refrest the grid before generating walls
-    animateWallGeneration(generatedWalls)
-    //console.log(generatedWalls)
+  function generateRecursiveDivisionMaze(e) {
+    e.preventDefault()
+    //initializeGrid()
+    let success = toogleUpdatingState()
+    if (success) {
+      const startPoint = grid[coordinates.START_X][coordinates.START_Y]
+      const endPoint = grid[coordinates.END_X][coordinates.END_Y]
+      console.log('this happen')
+      let generatedWalls = recursiveDivision(grid, startPoint, endPoint)
+      animateWallGeneration(generatedWalls)
+      //console.log(generatedWalls)
+    }
   }
 
+ 
+  function toogleUpdatingState() {          // to prevent user from generating walls and path while the grid is animating and updating its state
+    if (isAnimating){
+      setMessage('Grid updating is in process, please wait :3')
+      return false
+    }
+    else{
+      setIsAnimating(true)
+      return true
+    }
+  }
   
-  function animateWallGeneration(walls) {
-    for (let i=0; i < walls.length; i++) {
-      if (i === walls.length-1) {
+  function animateWallGeneration(generatedWalls) {
+    //setGridLoaded(false)  // refrest the grid before generating walls  // this line is causing problem (generating walls multiple times)
+    for (let i=0; i < generatedWalls.length; i++) {
+      if (i === generatedWalls.length-1) {
         setTimeout(() => {
-          const updatedGrid = updateGridStateWithWalls(walls)
+          const updatedGrid = updateGridStateWithWalls(generatedWalls)
           setGrid(updatedGrid)
+          setIsAnimating(false)
+          setMessage('Successful generated walls.You can now start your desired pathfinding method')
         }, speed  * i);
       }
-      let newWall = walls[i];
+      let newWall = generatedWalls[i];
       setTimeout(() => {
         document.getElementById(`${newWall[0]}-${newWall[1]}`).className = "grid-item wall"
       }, speed * i);
@@ -119,9 +150,10 @@ function PathFinder() {
 
   //console.log(JSON.stringify(grid, null, 2));
 
-  function startDijkstra() {
-    const startPoint = grid[START_X][START_Y]
-    const endPoint = grid[END_X][END_Y]
+  function startDijkstra(e) {
+    e.preventDefault()
+    const startPoint = grid[coordinates.START_X][coordinates.START_Y]
+    const endPoint = grid[coordinates.END_X][coordinates.END_Y]
     
     const sortedVisitedPoints = dijkstra(grid, startPoint, endPoint)
     //console.log(sortedVisitedPoints)
@@ -169,8 +201,19 @@ function PathFinder() {
     }
   }
 
+
   function clearBoard() {
-    setGridLoaded(false)  
+    let success = toogleUpdatingState()
+    if (success) {
+      setGridLoaded(false);  
+    }
+    else{
+      setMessage('Grid updating is in process, please wait :3')
+    } 
+  }
+
+  function clearPath() {
+    console.log('todo')
   }
 
 
@@ -194,8 +237,8 @@ function PathFinder() {
       let newPoint = {...point, path : true };
       updatedGrid[point.row][point.col] = newPoint
     }
-
   }
+
 
   function updateGridStateWithWalls(walls) {
     let updatedGrid = grid.slice();
@@ -209,43 +252,54 @@ function PathFinder() {
   }
 
 
-  function adjustSpeed(speed_) {
+  function adjustSpeed(e, speed_) {
+    e.preventDefault()
+
     if (speed_ === "slow"){
       setSpeed(40)
+      document.getElementById('slow').className = 'buttons selected'   // could make it in more React way but whatever zzzz
+      document.getElementById('medium').className = 'buttons'
+      document.getElementById('fast').className = 'buttons'
+
     }
     if (speed_ === "medium"){
       setSpeed(25)
+      document.getElementById('slow').className = 'buttons'
+      document.getElementById('medium').className = 'buttons selected'
+      document.getElementById('fast').className = 'buttons'
     }
-    else{
+    if (speed_ === "fast"){
       setSpeed(10)
+      document.getElementById('slow').className = 'buttons'
+      document.getElementById('medium').className = 'buttons'
+      document.getElementById('fast').className = 'buttons selected'
     }
   }
 
 
-
-  function setGridSize(size) {
+  function setGridSize(e, size) {
+    e.preventDefault()
+    
     if (size === "Large") {
-      setCellSize(25)
-      setRowCount(25)
-      setColumnCount(40)
-      clearBoard()
+      let copyGridStats = {...gridStats, rowCount : 25, columnCount : 40 , cellSize : 25}
+      setGridStats(copyGridStats)
+      setCoordinates({START_X : 3, START_Y : 3, END_X : 20, END_Y : 36})
     }
 
-    if (size === "Normal") {
-      setCellSize(30)
-      setRowCount(16)
-      setColumnCount(20)
-      clearBoard()
+    else if (size === "Normal") {
+      let copyGridStats = {...gridStats, rowCount : 16, columnCount : 21 , cellSize : 30}
+      setGridStats(copyGridStats)
+      setCoordinates({START_X : 3, START_Y : 3, END_X : 13, END_Y : 16})
     }
     
-    if (size === "Small") {
-      setCellSize(50)
-      setRowCount(10)
-      setColumnCount(15)
-      clearBoard()
+    else if (size === "Small") {
+      let copyGridStats = {...gridStats, rowCount : 10, columnCount : 15 , cellSize : 50}
+      setGridStats(copyGridStats) 
+      setCoordinates({START_X : 2, START_Y : 2, END_X : 7, END_Y : 12}) 
     }
-    
+    clearBoard()
   }
+
 
   return (
     <div className='app'>
@@ -254,25 +308,25 @@ function PathFinder() {
           <h1>PathFinder</h1>
         </div>
         <div>
-          <button onClick={()=> setGridSize('Small')}>Small</button>
-          <button onClick={()=> setGridSize('Normal')}>Normal</button>
-          <button onClick={()=> setGridSize('Large')}>Large</button>
+          <button className='buttons' id='small' onClick={(e)=> setGridSize(e,'Small')}>Small</button>
+          <button className='buttons' id='normal' onClick={(e)=> setGridSize(e,'Normal')}>Normal</button>
+          <button className='buttons' id='large' onClick={(e)=> setGridSize(e,'Large')}>Large</button>
         </div>
         <div>
-          <button>Select algorithm</button>
-          <button onClick={startDijkstra}> visualize</button>
+          <button className='buttons'>Select algorithm</button>
+          <button className='buttons' onClick={startDijkstra}> visualize</button>
         </div>
         <div>
-          <button>Maze generator</button>
-          <button onClick={generateRecursiveDivisionMaze}> Generate Maze</button>
+          <button className='buttons' onClick={generateScuffedWalls}> Random walls</button>
+          <button className='buttons' onClick={generateRecursiveDivisionMaze}> Recursive division</button>
         </div>
         <div>
-          <button onClick={()=>adjustSpeed('slow')}>Slow</button>
-          <button onClick={()=>adjustSpeed('medium')}>Medium</button>
-          <button onClick={()=>adjustSpeed('fast')}>Fast</button>
+          <button className='buttons' id='slow' onClick={(e)=>adjustSpeed(e,'slow')}>Slow</button>
+          <button className='buttons' id='medium' onClick={(e)=>adjustSpeed(e,'medium')}>Medium</button>
+          <button className='buttons' id='fast' onClick={(e)=>adjustSpeed(e,'fast')}>Fast</button>
         </div>
         <div>
-          <button onClick={clearBoard}>clear board</button>
+          <button className='buttons' onClick={clearBoard}>clear board</button>
         </div>
       </div>
       <div className='interface'>
@@ -281,8 +335,8 @@ function PathFinder() {
         </div>
         <div className='gridContainer'
           style={{
-            gridTemplateRows: `repeat(${rowCount}, 1fr)`,
-            gridTemplateColumns: `repeat(${columnCount}, 1fr)`
+            gridTemplateRows: `repeat(${gridStats.rowCount}, 1fr)`,
+            gridTemplateColumns: `repeat(${gridStats.columnCount}, 1fr)`
           }}
         >
           {
@@ -291,7 +345,7 @@ function PathFinder() {
               <Point 
                 key={`${point.row}-${point.col}`}
                 handleClick={handleClick}
-                cellSize={cellSize}
+                cellSize={gridStats.cellSize}
                 point={point}>
               </Point>   
             ))
