@@ -11,8 +11,8 @@ function PathFinder() {
   const [grid, setGrid] =  useState([]);
   //const [gridStats, setGridStats] = useState({rowCount : 25, columnCount : 40, cellSize : 25 })
   //const [coordinates, setCoordinates] = useState ({START_X : 3, START_Y : 3, END_X : 21, END_Y : 36})
-  const [gridStats, setGridStats] = useState({rowCount : 8, columnCount : 8, cellSize : 40 })
-  const [coordinates, setCoordinates] = useState ({START_X : 1, START_Y : 1, END_X : 6, END_Y : 6})
+  const [gridStats, setGridStats] = useState({rowCount : 25, columnCount : 40, cellSize : 25 })
+  const [coordinates, setCoordinates] = useState ({START_X : 3, START_Y : 3, END_X : 21, END_Y : 36})
   const [isAnimating, setIsAnimating] = useState(false)
   const [gridLoaded, setGridLoaded] = useState(false)
   const [message, setMessage] = useState("Select the desired algorithm and find the path")
@@ -99,6 +99,7 @@ function PathFinder() {
       setMessage('Grid updating is in process, please wait :3')
       return
     } 
+    setMessage('Generating walls')
     setIsAnimating(true)
     clearWholeGridState()
 
@@ -108,7 +109,7 @@ function PathFinder() {
       let randomWalls = scuffedWalls(grid, startPoint, endPoint)
       //console.log(randomWalls)
       animateWallGeneration(randomWalls)
-    }, speed * 20);
+    }, speed * 10);
   }
   
   function generateRecursiveDivisionMaze(e) {
@@ -116,7 +117,8 @@ function PathFinder() {
     if (isAnimating) {
       setMessage('Grid updating is in process, please wait :3')
       return
-    } 
+    }
+    setMessage('Generating walls') 
     setIsAnimating(true)
     clearWholeGridState()
     
@@ -125,7 +127,7 @@ function PathFinder() {
       const endPoint = grid[coordinates.END_X][coordinates.END_Y]
       let generatedWalls = recursiveDivision(grid, startPoint, endPoint)
       animateWallGeneration(generatedWalls)
-    }, speed * 20);
+    }, speed * 10);
   }
   
   function toggleUpdating(callback) {          // to prevent user from generating walls and path while the grid is animating and updating its state
@@ -177,12 +179,17 @@ function PathFinder() {
     //console.log(sortedVisitedPoints)
       visualizeDijkstra(sortedVisitedPoints, endPoint)
       
-    }, speed) * 30;
+    }, speed);
 
   }
   
 
   function visualizeDijkstra(sortedVisitedPoints, endPoint) {
+    if (sortedVisitedPoints.length === 1) {    // if the start point is the only visisted point
+      setIsAnimating(false)
+      setMessage('Unable to find the path :(')
+      return
+    }
     for (let i = 1; i < sortedVisitedPoints.length-1 ; i++) {
       setTimeout(() => {
         const visitedPoint = sortedVisitedPoints[i]
@@ -199,11 +206,9 @@ function PathFinder() {
 
   function findDijkstraPath(endPoint, sortedVisitedPoints) {
     let shortestPath = sortedShortestPoints(endPoint)
-    //console.log(sortedVisitedPoints)
-    //console.log(shortestPath)
     
-    if (shortestPath.length === 1) {
-      window.alert('Unable to find the path')
+    if (shortestPath.length === 1 ) {   /// if we dont find the end point
+      setMessage('Unable to find the path :(')
       setIsAnimating(false)
       return
     }
@@ -214,7 +219,7 @@ function PathFinder() {
           const newGrid = updateGridState(grid, sortedVisitedPoints, shortestPath )
           setGrid(newGrid)
           setIsAnimating(false)
-          setMessage(`Shortest path distance : ${shortestPath.length-1}`)
+          setMessage(`Dijkstra : Shortest path distance : ${shortestPath.length-1}`)
         }, i * 30);
         return
       }
@@ -225,6 +230,9 @@ function PathFinder() {
     }
   }
 
+  function startAstar() {
+    window.alert('have not implemented yet :(')
+  }
 
   function clearBoard() {   /// this all reset the each cell state and grid structure  
     toggleUpdating(()=> {
@@ -342,31 +350,52 @@ function PathFinder() {
   return (
     <div className='app'>
       <div className='setting'>
-        <div>
+        <div className='title'>
           <h1>PathFinder</h1>
         </div>
-        <div>
+        <div className='buttons-container'>
           <button className='buttons' id='small' onClick={(e)=> setGridSize(e,'Small')}>Small</button>
           <button className='buttons' id='normal' onClick={(e)=> setGridSize(e,'Normal')}>Normal</button>
           <button className='buttons' id='large' onClick={(e)=> setGridSize(e,'Large')}>Large</button>
         </div>
-        <div>
-          <button className='buttons'>Select algorithm</button>
-          <button className='buttons' onClick={startDijkstra}> visualize</button>
+        <div className='buttons-container'>
+          <button className='buttons' onClick={startAstar}>A*</button>
+          <button className='buttons' onClick={startDijkstra}> Dijkstra</button>
         </div>
-        <div>
+        <div className='buttons-container'>
           <button className='buttons' onClick={generateScuffedWalls}> Random walls</button>
           <button className='buttons' onClick={generateRecursiveDivisionMaze}> Recursive division</button>
         </div>
-        <div>
+        <div className='buttons-container'>
           <button className='buttons' id='slow' onClick={(e)=>adjustSpeed(e,'slow')}>Slow</button>
           <button className='buttons' id='medium' onClick={(e)=>adjustSpeed(e,'medium')}>Medium</button>
           <button className='buttons' id='fast' onClick={(e)=>adjustSpeed(e,'fast')}>Fast</button>
         </div>
-        <div>
-          <button className='buttons' onClick={clearBoard}>clear board</button>
-          <button className='buttons' onClick={clearPath}>clear path</button>
+        <div className='buttons-container'>
+          <button className='buttons red' onClick={clearBoard}>clear board</button>
+          <button className='buttons red' onClick={clearPath}>clear path</button>
         </div>
+        <div className='label-container'>
+          <div className='icon start'></div>
+          <span>Start</span>
+        </div>
+        <div className='label-container'>
+          <div className='icon end'></div>
+          <span>End</span>
+        </div>
+        <div className='label-container'>
+          <div className='icon wall'></div>
+          <span>Wall</span>
+        </div>
+        <div className='label-container'>
+          <div className='icon visited'></div>
+          <span>Visited cell</span>
+        </div>
+        <div className='label-container'>
+          <div className='icon path'></div>
+          <span>Path</span>
+        </div>
+  
       </div>
       <div className='interface'>
         <div className='message-Container'>
