@@ -1,8 +1,5 @@
 let walls;
 
-// TODO
-// algorithms does not work correctly atm
-
 export function recursiveDivision(grid, startPoint, endPoint) {
     walls = [];
     const columnIndices = range(grid[0].length);
