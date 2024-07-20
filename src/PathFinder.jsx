@@ -93,40 +93,38 @@ function PathFinder() {
 
   function generateScuffedWalls(e) {
     e.preventDefault()
-    let success = toogleUpdatingState()
-    if (success) {
+    toggleUpdating(()=> {
       const startPoint = grid[coordinates.START_X][coordinates.START_Y]
       const endPoint = grid[coordinates.END_X][coordinates.END_Y]
       let randomWalls = scuffedWalls(grid, startPoint, endPoint)
       //console.log(randomWalls)
       animateWallGeneration(randomWalls)
-    }
+    })
   }
 
 
   function generateRecursiveDivisionMaze(e) {
     e.preventDefault()
-    //initializeGrid()
-    let success = toogleUpdatingState()
-    if (success) {
-      const startPoint = grid[coordinates.START_X][coordinates.START_Y]
-      const endPoint = grid[coordinates.END_X][coordinates.END_Y]
-      console.log('this happen')
-      let generatedWalls = recursiveDivision(grid, startPoint, endPoint)
-      animateWallGeneration(generatedWalls)
-      //console.log(generatedWalls)
-    }
+
+    toggleUpdating(()=> {
+        const startPoint = grid[coordinates.START_X][coordinates.START_Y]
+        const endPoint = grid[coordinates.END_X][coordinates.END_Y]
+        let generatedWalls = recursiveDivision(grid, startPoint, endPoint)
+        animateWallGeneration(generatedWalls)
+        //console.log(generatedWalls)
+      }
+    )
   }
+  
 
  
-  function toogleUpdatingState() {          // to prevent user from generating walls and path while the grid is animating and updating its state
+  function toggleUpdating(callback) {          // to prevent user from generating walls and path while the grid is animating and updating its state
     if (isAnimating){
       setMessage('Grid updating is in process, please wait :3')
-      return false
     }
     else{
       setIsAnimating(true)
-      return true
+      callback()
     }
   }
   
@@ -148,17 +146,20 @@ function PathFinder() {
     }
   }
 
-  //console.log(JSON.stringify(grid, null, 2));
 
   function startDijkstra(e) {
     e.preventDefault()
+    //toggleUpdating(() => {   // this is messin up with the animation timing dunno how to fix it 
+
     const startPoint = grid[coordinates.START_X][coordinates.START_Y]
     const endPoint = grid[coordinates.END_X][coordinates.END_Y]
-    
+      
     const sortedVisitedPoints = dijkstra(grid, startPoint, endPoint)
     //console.log(sortedVisitedPoints)
     visualizeDijkstra(sortedVisitedPoints, endPoint)
+    //})  
   }
+  
 
   function visualizeDijkstra(sortedVisitedPoints, endPoint) {
     for (let i = 1; i < sortedVisitedPoints.length-1 ; i++) {
@@ -166,22 +167,23 @@ function PathFinder() {
         const visitedPoint = sortedVisitedPoints[i]
         document.getElementById(`${visitedPoint.row}-${visitedPoint.col}`).className = "grid-item visited" 
       }, speed * i);
-    }
 
-    //timeout delay to call findDijkstraPath after all previous timeouts have finished
-    setTimeout(() => {
-      findDijkstraPath(endPoint, sortedVisitedPoints);
-    }, speed * sortedVisitedPoints.length);
+      if (i === sortedVisitedPoints.length-2) {
+        setTimeout(() => {
+            findDijkstraPath(endPoint, sortedVisitedPoints);  
+        }, speed * i);
+      }
+    }
   }
 
   function findDijkstraPath(endPoint, sortedVisitedPoints) {
     let shortestPath = sortedShortestPoints(endPoint)
-
     //console.log(sortedVisitedPoints)
     //console.log(shortestPath)
     
     if (shortestPath.length === 1) {
       window.alert('Unable to find the path')
+      setIsAnimating(false)
       return
     }
     
@@ -189,8 +191,9 @@ function PathFinder() {
       if ( i === shortestPath.length - 1) {
         setTimeout(() => {
           const newGrid = updateGridState(grid, sortedVisitedPoints, shortestPath )
-          setMessage(`Shortest path distance : ${shortestPath.length-1}`)
           setGrid(newGrid)
+          setIsAnimating(false)
+          setMessage(`Shortest path distance : ${shortestPath.length-1}`)
         }, i * 30);
         return
       }
@@ -202,14 +205,10 @@ function PathFinder() {
   }
 
 
-  function clearBoard() {
-    let success = toogleUpdatingState()
-    if (success) {
-      setGridLoaded(false);  
-    }
-    else{
-      setMessage('Grid updating is in process, please wait :3')
-    } 
+  function clearBoard() {    
+    toggleUpdating(()=> {
+      setGridLoaded(false)
+    })
   }
 
   function clearPath() {
