@@ -78,7 +78,7 @@ function PathFinder() {
   //console.log(grid)
 
   function initializeGrid() {     
-      const copyGrid = []
+      let copyGrid = []
       for (let row=0; row < gridStats.rowCount ; row++){
         const currentRow = []
         for (let col=0; col < gridStats.columnCount ; col++){
@@ -88,36 +88,46 @@ function PathFinder() {
       }
       setGrid(copyGrid)
       setGridLoaded(true)
+      setMessage('Select the desired algorithm and find the path')
       setIsAnimating(false)
   }
 
   function generateScuffedWalls(e) {
+    
     e.preventDefault()
-    toggleUpdating(()=> {
+    if (isAnimating) {
+      setMessage('Grid updating is in process, please wait :3')
+      return
+    } 
+    setIsAnimating(true)
+    clearWholeGridState()
+
+    setTimeout(() => {
       const startPoint = grid[coordinates.START_X][coordinates.START_Y]
       const endPoint = grid[coordinates.END_X][coordinates.END_Y]
       let randomWalls = scuffedWalls(grid, startPoint, endPoint)
       //console.log(randomWalls)
       animateWallGeneration(randomWalls)
-    })
-  }
-
-
-  function generateRecursiveDivisionMaze(e) {
-    e.preventDefault()
-
-    toggleUpdating(()=> {
-        const startPoint = grid[coordinates.START_X][coordinates.START_Y]
-        const endPoint = grid[coordinates.END_X][coordinates.END_Y]
-        let generatedWalls = recursiveDivision(grid, startPoint, endPoint)
-        animateWallGeneration(generatedWalls)
-        //console.log(generatedWalls)
-      }
-    )
+    }, speed * 20);
   }
   
-
- 
+  function generateRecursiveDivisionMaze(e) {
+    e.preventDefault()
+    if (isAnimating) {
+      setMessage('Grid updating is in process, please wait :3')
+      return
+    } 
+    setIsAnimating(true)
+    clearWholeGridState()
+    
+    setTimeout(() => {
+      const startPoint = grid[coordinates.START_X][coordinates.START_Y]
+      const endPoint = grid[coordinates.END_X][coordinates.END_Y]
+      let generatedWalls = recursiveDivision(grid, startPoint, endPoint)
+      animateWallGeneration(generatedWalls)
+    }, speed * 20);
+  }
+  
   function toggleUpdating(callback) {          // to prevent user from generating walls and path while the grid is animating and updating its state
     if (isAnimating){
       setMessage('Grid updating is in process, please wait :3')
@@ -130,6 +140,7 @@ function PathFinder() {
   
   function animateWallGeneration(generatedWalls) {
     //setGridLoaded(false)  // refrest the grid before generating walls  // this line is causing problem (generating walls multiple times)
+    
     for (let i=0; i < generatedWalls.length; i++) {
       if (i === generatedWalls.length-1) {
         setTimeout(() => {
@@ -151,13 +162,23 @@ function PathFinder() {
     e.preventDefault()
     //toggleUpdating(() => {   // this is messin up with the animation timing dunno how to fix it 
 
-    const startPoint = grid[coordinates.START_X][coordinates.START_Y]
-    const endPoint = grid[coordinates.END_X][coordinates.END_Y]
+    if (isAnimating) {
+      console.log('no')
+      return
+    }
+    setIsAnimating(true)
+    clearPath()
+
+    setTimeout(() => {
+      const startPoint = grid[coordinates.START_X][coordinates.START_Y]
+      const endPoint = grid[coordinates.END_X][coordinates.END_Y]
       
-    const sortedVisitedPoints = dijkstra(grid, startPoint, endPoint)
+      const sortedVisitedPoints = dijkstra(grid, startPoint, endPoint)
     //console.log(sortedVisitedPoints)
-    visualizeDijkstra(sortedVisitedPoints, endPoint)
-    //})  
+      visualizeDijkstra(sortedVisitedPoints, endPoint)
+      
+    }, speed) * 30;
+
   }
   
 
@@ -205,14 +226,21 @@ function PathFinder() {
   }
 
 
-  function clearBoard() {    
+  function clearBoard() {   /// this all reset the each cell state and grid structure  
     toggleUpdating(()=> {
       setGridLoaded(false)
     })
   }
 
   function clearPath() {
-    console.log('todo')
+    let updatedGrid = grid.slice()
+    for (let eachRow of grid) {
+      for (let point of eachRow){
+        let copyPoint = {...point, path : false, visited : false}
+        updatedGrid[point.row][point.col] = copyPoint
+      }
+    }
+    setGrid(updatedGrid)
   }
 
 
@@ -248,6 +276,17 @@ function PathFinder() {
       updatedGrid[wall[0]][wall[1]] = copyPoint
     }
     return updatedGrid
+  }
+
+  function clearWholeGridState() {
+    let updatedGrid = grid.slice()
+    for (let eachRow of grid) {
+      for (let point of eachRow){
+        let copyPoint = {...point, isWall : false, path : false, visited : false}
+        updatedGrid[point.row][point.col] = copyPoint
+      }
+    }
+    setGrid(updatedGrid)
   }
 
 
@@ -326,6 +365,7 @@ function PathFinder() {
         </div>
         <div>
           <button className='buttons' onClick={clearBoard}>clear board</button>
+          <button className='buttons' onClick={clearPath}>clear path</button>
         </div>
       </div>
       <div className='interface'>
