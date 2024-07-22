@@ -75,7 +75,6 @@ function PathFinder() {
   }
 
  
-
   function createPoint(row, col) {     // constructing each point in grid (showing its state, coordinates, type etc....)
     return {
       row : row,
