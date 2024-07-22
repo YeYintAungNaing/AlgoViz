@@ -2,6 +2,7 @@ let walls;
 
 export function scuffedWalls(grid, startPoint, endPoint) {
   walls = []    // forgetting to put this fking simple line make me wasted so many brain cells and time ... fml 
+  
     for (let row=0; row < grid.length; row++){
       for (let col=0; col < grid[0].length; col++){
         if (row === startPoint.row && col === startPoint.col || 
@@ -14,7 +15,6 @@ export function scuffedWalls(grid, startPoint, endPoint) {
           }
           else{
             if (Math.random() > 0.3){
-              
               walls.push([row, col])
             }
           }
@@ -32,6 +32,5 @@ export function scuffedWalls(grid, startPoint, endPoint) {
       } 
     }
   }
-
   return walls
 }

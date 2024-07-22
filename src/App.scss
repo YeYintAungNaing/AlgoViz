@@ -46,12 +46,12 @@
         background-color: rgb(219, 235, 227);
 
         .title{
+            
             h1{
                 margin-top: 15px;
                 margin-bottom: 5px;
                 font-style:italic;
-            }
-            
+            } 
         }
 
 
@@ -67,10 +67,10 @@
         .label-container{
             display: flex;
             align-items: center;
-            
             gap: 20px;
             flex-wrap: wrap;
             width: 150px;
+            margin-left: 50px;
             
         
             .icon{   
@@ -91,12 +91,9 @@
                 background-color: rgb(4, 247, 247);
             }
             .icon.path{
-                background-color: rgb(59, 95, 117);
-            }
-
-            
+                background-color: rgb(0, 153, 249);
+            }   
         }
- 
     }
 
     .interface{
@@ -110,16 +107,14 @@
         border: solid 0.1mm gray ;
         border-radius: 10px;
         box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;
+
         
-
-
         .gridContainer{
             display: grid;
             gap: 1px;
             margin-top: 10px;
             
             .grid-item{
-    
                 border: 1.5px solid #e1d8d8;
                 
             }
@@ -141,16 +136,16 @@
 
                 @keyframes constructing-animation {
                     0% {
-                      background-color: rgba(124, 129, 129, 0); /* Start transparent */
-                      box-shadow: 0 0 0 0 rgba(33, 33, 33, 0.7); /* No shadow */
+                      background-color: rgba(124, 129, 129, 0); 
+                      box-shadow: 0 0 0 0 rgba(33, 33, 33, 0.7); 
                     }
                     50% {
-                      background-color: rgba(22, 24, 24, 0.5); /* Semi-transparent */
-                      box-shadow: 0 0 10px 5px rgba(44, 45, 45, 0.5); /* Intermediate shadow */
+                      background-color: rgba(22, 24, 24, 0.5); 
+                      box-shadow: 0 0 10px 5px rgba(44, 45, 45, 0.5); 
                     }
                     100% {
-                      background-color: rgb(0, 0, 0); /* Final color */
-                      box-shadow: 0 0 20px 10px rgba(4, 4, 4, 0); /* Fading shadow */
+                      background-color: rgb(0, 0, 0); 
+                      box-shadow: 0 0 20px 10px rgba(4, 4, 4, 0); 
                     }
                   }
             }
@@ -161,21 +156,21 @@
               
               @keyframes spreading-animation {
                 0% {
-                  background-color: rgba(183, 206, 206, 0); /* Start transparent */
-                  box-shadow: 0 0 0 0 rgba(240, 240, 240, 0.7); /* No shadow */
+                  background-color: rgba(183, 206, 206, 0); 
+                  box-shadow: 0 0 0 0 rgba(240, 240, 240, 0.7); 
                 }
                 50% {
-                  background-color: rgba(88, 192, 192, 0.5); /* Semi-transparent */
-                  box-shadow: 0 0 10px 5px rgba(26, 235, 235, 0.5); /* Intermediate shadow */
+                  background-color: rgba(88, 192, 192, 0.5); 
+                  box-shadow: 0 0 10px 5px rgba(26, 235, 235, 0.5); 
                 }
                 100% {
-                  background-color: rgb(4, 247, 247); /* Final color */
-                  box-shadow: 0 0 20px 10px rgba(26, 235, 235, 0); /* Fading shadow */
+                  background-color: rgb(4, 247, 247); 
+                  box-shadow: 0 0 20px 10px rgba(26, 235, 235, 0); 
                 }
               }
 
             .grid-item.path{
-                background-color: rgb(59, 95, 117);
+                background-color: rgb(0, 153, 249);
             }
         }
     }

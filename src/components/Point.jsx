@@ -1,5 +1,5 @@
 // eslint-disable-next-line react/prop-types
-function Point({handleClick, point, cellSize}) {
+function Point({handleMouseDown, handleMouseUp, handleOnMouseEnter, point, cellSize}) {
 
     // eslint-disable-next-line react/prop-types
     const {row, col, isStart, isEnd, isWall, path, visited} = point
@@ -15,7 +15,9 @@ function Point({handleClick, point, cellSize}) {
                 height:`${cellSize}px`
               }}
             id={`${row}-${col}`}
-            onClick={() => handleClick(row, col)}>
+            onMouseDown={() => handleMouseDown(row, col)}
+            onMouseEnter={() => handleOnMouseEnter(row, col)}
+            onMouseUp={handleMouseUp}>
         </div>  
     )
 }
