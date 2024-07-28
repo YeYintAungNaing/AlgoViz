@@ -14,7 +14,7 @@ export function dijkstra(grid, startPoint, endPoint) {
         // sorting each point in the array based on distance attribute
         unvisitedPoints.sort((pointA, pointB)=> pointA.distance - pointB.distance) 
         
-        const closestPoint = unvisitedPoints.shift();
+        const closestPoint = unvisitedPoints.shift();  // remove first element and return 
 
         if (closestPoint.distance === Infinity) return sortedVisitedPoints
         if (closestPoint.isWall) continue
@@ -26,7 +26,7 @@ export function dijkstra(grid, startPoint, endPoint) {
 }
 
 
-// updating distance to each adjacent point
+// updating distance of each adjacent point
 function updateUnivistedAdjacentPoints(grid, point) {
     const unvisitedAdjacentPoints = getUnvisitedAdjacentPoints(grid, point);
     for (const adjacentPoint of  unvisitedAdjacentPoints) {   // update distance and previours point of each neighbour
@@ -48,7 +48,7 @@ function getUnvisitedAdjacentPoints(grid, point) {
 }
 
 
-export function sortedShortestPoints(endPoint) {
+export function sortedDijkstraPathPoints(endPoint) {
     let shortestPathPoints = []
     let currentPoint = endPoint;
     

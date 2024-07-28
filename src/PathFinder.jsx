@@ -1,30 +1,29 @@
 import { useEffect, useState } from 'react'
 import './App.scss'
 import Point from './components/Point';
-import  {dijkstra, sortedShortestPoints}  from './algorithms/Dijkstra.js';
+import  {dijkstra, sortedDijkstraPathPoints}  from './algorithms/Dijkstra.js';
+import { astar, sortedAstarPathPoints } from './algorithms/Astar.js';
 import { recursiveDivision } from './mazeGenerators/recursiveDivision.js';
 import { scuffedWalls } from './mazeGenerators/scuffedWalls.js';
 
 
-function PathFinder() {
+function PathFinder() { 
 
   const [grid, setGrid] =  useState([]);
   //const [gridStats, setGridStats] = useState({rowCount : 25, columnCount : 40, cellSize : 25 })
   //const [coordinates, setCoordinates] = useState ({START_X : 3, START_Y : 3, END_X : 21, END_Y : 36})
-  const [gridStats, setGridStats] = useState({rowCount : 25, columnCount : 40, cellSize : 25 })
-  const [coordinates, setCoordinates] = useState ({START_X : 3, START_Y : 3, END_X : 21, END_Y : 36})
-  const [isAnimating, setIsAnimating] = useState(false)
+  const [gridStats, setGridStats] = useState({rowCount : 23, columnCount : 40, cellSize : 25 })
+  const [coordinates, setCoordinates] = useState ({START_X : 3, START_Y : 3, END_X : 19, END_Y : 36})
+  const [isAnimating, setIsAnimating] = useState(false) 
   const [gridLoaded, setGridLoaded] = useState(false)
   const [message, setMessage] = useState("Select the desired algorithm and find the path")
   const [speed, setSpeed] = useState(30)
   const [mouseIsPressed, setMouseIsPressed] = useState(false)
 
-  // const pointsRef = useRef({});  
-
+  // const pointsRef = useRef({}); 
   // TODO 
   // allow use to move start and end points
   // add more path finding algorithms
-
 
   useEffect(()=>{
     if (!gridLoaded){
@@ -71,10 +70,11 @@ function PathFinder() {
 
 
   function handleMouseUp() {
+    
     setMouseIsPressed(false)
   }
 
- 
+
   function createPoint(row, col) {     // constructing each point in grid (showing its state, coordinates, type etc....)
     return {
       row : row,
@@ -82,6 +82,7 @@ function PathFinder() {
       isStart : row === coordinates.START_X && col === coordinates.START_Y,
       isEnd : row === coordinates.END_X && col === coordinates.END_Y,
       distance : Infinity,
+      totalDistance : Infinity,
       visited : false,
       isWall : false,
       path : false,
@@ -188,21 +189,23 @@ function PathFinder() {
 
     setTimeout(() => {
       const startPoint = grid[coordinates.START_X][coordinates.START_Y]
-      const endPoint = grid[coordinates.END_X][coordinates.END_Y] 
+      const endPoint = grid[coordinates.END_X][coordinates.END_Y]
       const sortedVisitedPoints = dijkstra(grid, startPoint, endPoint)
-      //console.log(sortedVisitedPoints)
-      visualizeDijkstra(sortedVisitedPoints, endPoint) 
+      const shortestPath = sortedDijkstraPathPoints(endPoint)
+      //console.log(shortestPath)
+      visualizeAlgorithm(sortedVisitedPoints, endPoint, shortestPath, "Dijkstra") 
     }, speed);
   }
   
+  //console.log(grid)
 
-  function visualizeDijkstra(sortedVisitedPoints, endPoint) {
+  function visualizeAlgorithm(sortedVisitedPoints, endPoint, shortestPath, algorithm) {
     if (sortedVisitedPoints.length === 1) {    // if the start point is the only visisted point
       setIsAnimating(false)
       setMessage('Unable to find the path :(')
       return
     }
-    for (let i = 1; i < sortedVisitedPoints.length-1 ; i++) {
+    for (let i = 1; i < sortedVisitedPoints.length-1 ; i++) {   // does not include first and last point
       setTimeout(() => {
         const visitedPoint = sortedVisitedPoints[i]
         document.getElementById(`${visitedPoint.row}-${visitedPoint.col}`).className = "grid-item visited" 
@@ -210,15 +213,14 @@ function PathFinder() {
 
       if (i === sortedVisitedPoints.length-2) {
         setTimeout(() => {
-            findDijkstraPath(endPoint, sortedVisitedPoints);  
+            getShortestPath(sortedVisitedPoints, shortestPath, algorithm);  
         }, speed * i);
       }
     }
   }
 
 
-  function findDijkstraPath(endPoint, sortedVisitedPoints) {
-    let shortestPath = sortedShortestPoints(endPoint)
+  function getShortestPath(sortedVisitedPoints, shortestPath, algorithm) {
     
     if (shortestPath.length === 1 ) {   /// if we dont find the end point
       setMessage('Unable to find the path :(')
@@ -226,14 +228,14 @@ function PathFinder() {
       return
     }
     
-    for (let i = 1; i < shortestPath.length ; i++) {
-      if ( i === shortestPath.length - 1) {
+    for (let i = 1; i < shortestPath.length-1 ; i++) {
+      if ( i === shortestPath.length - 2) {
         setTimeout(() => {
           const newGrid = updateGridState(grid, sortedVisitedPoints, shortestPath )
           setGrid(newGrid)
           setIsAnimating(false)
-          setMessage(`Dijkstra : Shortest path distance : ${shortestPath.length-1}`)
-        }, i * 30);
+          setMessage(`${algorithm} : Shortest path distance : ${shortestPath.length-1}`)
+        }, i * 20);
         return
       }
       setTimeout(() => {
@@ -244,8 +246,25 @@ function PathFinder() {
   }
 
 
-  function startAstar() {
-    window.alert('have not implemented yet :(')
+  function startAstar(e) {
+    e.preventDefault()
+
+    if (isAnimating) {
+      console.log('no')
+      return
+    }
+    setIsAnimating(true)
+    clearPath()
+
+    setTimeout(() => {
+      const startPoint = grid[coordinates.START_X][coordinates.START_Y]
+      const endPoint = grid[coordinates.END_X][coordinates.END_Y] 
+      const sortedVisitedPoints = astar(grid, startPoint, endPoint)
+      const shortestPath =sortedAstarPathPoints(endPoint)  // include both end and start points
+      //console.log(shortestPath)
+      //console.log(sortedVisitedPoints)
+      visualizeAlgorithm(sortedVisitedPoints, endPoint, shortestPath, "Astar") 
+    }, speed);
   }
 
 
@@ -272,6 +291,7 @@ function PathFinder() {
     let updatedGrid = grid.slice();
     for (let point of sortedVisitedPoints) {
       if (point.isStart || point.isEnd) {
+        updatedGrid[point.row][point.col] = {...point, visited : false }
         continue
       }
       //let newPoint = {...point, visited : true}   // already marked visisted in algorithm
@@ -342,9 +362,9 @@ function PathFinder() {
     e.preventDefault()
     
     if (size === "Large") {
-      let copyGridStats = {...gridStats, rowCount : 25, columnCount : 40 , cellSize : 25}
+      let copyGridStats = {...gridStats, rowCount : 23, columnCount : 40 , cellSize : 25}
       setGridStats(copyGridStats)
-      setCoordinates({START_X : 3, START_Y : 3, END_X : 20, END_Y : 36})
+      setCoordinates({START_X : 3, START_Y : 3, END_X : 19, END_Y : 36})
     }
 
     else if (size === "Normal") {
@@ -426,8 +446,7 @@ function PathFinder() {
             grid.map((eachRow) => 
               eachRow.map((point) =>  // each point created from createPoint()
               <Point 
-                key={`${point.row}-${point.col}`}
-                
+                key={`${point.row}-${point.col}`}     
                 handleMouseDown={handleMouseDown}
                 handleMouseUp={handleMouseUp}
                 handleOnMouseEnter={handleOnMouseEnter}

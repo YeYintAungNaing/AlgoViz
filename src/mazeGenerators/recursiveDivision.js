@@ -2,7 +2,7 @@ let walls;
 
 export function recursiveDivision(grid, startPoint, endPoint) {
     walls = [];
-    const columnIndices = range(grid[0].length);
+    const columnIndices = range(grid[0].length);  // array of indices
     const rowIndices = range(grid.length);
     getRecursiveWalls(grid, columnIndices, rowIndices, startPoint, endPoint)
     return walls
@@ -67,9 +67,11 @@ function getRecursiveWalls(grid, columnIndices, rowIndices, startPoint, endPoint
 
   function getRandomOddNumberForDivision(array) {
     let max = array.length - 1;
-    let randomNum =
+    let randomNum =      // favors smaller num
       Math.floor(Math.random() * (max / 2)) +
       Math.floor(Math.random() * (max / 2));
+    //let randomNum = Math.floor(Math.random() * max) 
+      
     if (randomNum % 2 === 0) {
       if (randomNum === max) {
         randomNum -= 1;
@@ -115,7 +117,7 @@ function addWall(verticalWall, randomNum, rowIndices, columnIndices, startPoint,
     }
   }
 
-  // have to make a random hole in the entire wall if the wall is not on the start/end point
+  // make a random hole in the entire wall if the wall is not on the start/end point
   if (!isStartEnd) {   
     tempWalls.splice(getRandomOddNumber(tempWalls.length), 1);
   }
@@ -134,9 +136,10 @@ function addWall(verticalWall, randomNum, rowIndices, columnIndices, startPoint,
 } */
 
   function getRandomOddNumber(max) {
-    let randomNum =
-      Math.floor(Math.random() * (max / 2)) +
-      Math.floor(Math.random() * (max / 2));
+    //let randomNum =    // favors smaller num
+    //  Math.floor(Math.random() * (max / 2)) +
+    //  Math.floor(Math.random() * (max / 2));
+    let randomNum = Math.floor(Math.random() * max)
     if (randomNum % 2 !== 0) {
       if (randomNum === max) {
         randomNum -= 1;
