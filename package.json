@@ -1,5 +1,5 @@
 {
-  "name": "pathfinder",
+  "name": "algo-viz",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,6 +12,7 @@
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.0",
     "sass": "^1.77.6",
     "tinyqueue": "^3.0.0"
   },

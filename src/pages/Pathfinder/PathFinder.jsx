@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
-import './App.scss'
-import Point from './components/Point';
-import  {dijkstra, sortedDijkstraPathPoints}  from './algorithms/Dijkstra.js';
-import { astar, sortedAstarPathPoints } from './algorithms/Astar.js';
-import { recursiveDivision } from './mazeGenerators/recursiveDivision.js';
-import { scuffedWalls } from './mazeGenerators/scuffedWalls.js';
+import './PathFinder.scss'
+import Point from '../../components/Point.jsx';
+import  {dijkstra, sortedDijkstraPathPoints}  from '../../algorithms/Dijkstra.js';
+import { astar, sortedAstarPathPoints } from '../../algorithms/Astar.js';
+import { recursiveDivision } from '../../mazeGenerators/recursiveDivision.js';
+import { scuffedWalls } from '../../mazeGenerators/scuffedWalls.js';
 
 
-function PathFinder() { 
+function PathFindingVisualizer() { 
 
   const [grid, setGrid] =  useState([]);
   //const [gridStats, setGridStats] = useState({rowCount : 25, columnCount : 40, cellSize : 25 })
@@ -383,7 +383,7 @@ function PathFinder() {
 
 
   return (
-    <div className='app'>
+    <div className='PathFinder'>
       <div className='setting'>
         <div className='title'>
           <h1>PathFinder</h1>
@@ -461,4 +461,4 @@ function PathFinder() {
   )
 }
 
-export default PathFinder
+export default PathFindingVisualizer
