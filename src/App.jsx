@@ -9,6 +9,7 @@ import MyAlgorithm from './pages/MyAlgorithm/MyAlgorithm';
 import Documentation from './pages/Documenttation/Documentation';
 import ContactUs from './pages/ContactUs/ContactUs';
 import PathFindingVisualizer from './pages/Pathfinder/PathFinder';
+import Register from './pages/auth/Register';
 
 
 function App() {
@@ -17,7 +18,7 @@ function App() {
       return (
         <>
           <NavBar/>
-          <div className='app-container'>
+          <div className='page-container'>
             <Outlet/>
           </div>
           <Footer/>
@@ -33,6 +34,10 @@ function App() {
           {
             path : '/AlgoViz',
             element : <Home/> 
+          },
+          {
+            path : '/AlgoViz/register',
+            element : <Register></Register>
           },
           {
             path : '/AlgoViz/sortingVisualizer',

@@ -1,59 +1,143 @@
 /* header, footer, home page */
 
-.app {    // both header, footer and the page between
+.app{    // both header, footer and the page between
     display: flex;
     flex-direction: column;
     justify-content: center;
+    min-height: 100vh;
     
-
     .link{
         text-decoration: none;
         color: inherit;
     }
 
+    .submit-button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgb(63, 145, 90);
+        color: #000000;
+        font-size: 12px;
+        padding: 10px 45px;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #15782e; 
+        }
+    }
+
     .navBar{
+        height: 65px;
         display: flex;
         justify-content: space-between;
-        background-color: azure;
-        border: solid 0.1mm gray ;
-        border-radius: 10px;
-        box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;
+        align-items: center;
+        background-color: rgb(63, 145, 90);
+        padding: 0px  20px;
+        flex-shrink: 0;
 
-        .Logo{
-            img{
-                width: 70px;  
+        h1{
+            color: #eee;
+            &:hover {
+               color: #000000; 
             }
         }
 
         .navLinks{
             display: flex;
             align-items: center;
-            gap: 30px;
-            cursor: pointer;
-            padding: 0px 10px;  
-        }
-    }
-        
-    .app-container{   // page between nav and footer ( for every page )
-        height: 95vh;
-    }
-
-    .home{
-        display: flex;
-        flex-direction: column;
-
-        .home-cards{
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-
-            button{
+            gap: 25px;
+            height: 65px; 
+            
+            .link{
                 font-size: 20px;
+                color: #eee;
+                display: flex;     // text inside link 
+                justify-content: center;
+                align-items: center;
+                height: 65px;
+                padding: 0px  5px;
+
+                &:hover {
+                    background-color: #15782e; 
+                }
+            }
+
+            .submit-button{
+                background-color: #eee;
+                color: #15782e;
+                font-size: 13px;
+                padding: 10px 35px;
+                font: bold;
+                border: 1px solid;  
             }
         }
     }
+        
+    .page-container{   // page between nav and footer ( for every page ) 
+        flex-grow: 1;  // This makes the page content take up the remaining space
+        display: flex;
+        flex-direction: column;
 
+        .home {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+          
+            .home-cards {
+              display: grid;
+              grid-template-columns: repeat(2, 1fr);
+              grid-gap: 20px;
+              max-width: 1000px;
+              width: 100%;
+          
+              .home-card {
+                background-color: #f9f9f9;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                padding: 20px;
+                text-align: center;
+                transition: transform 0.3s ease;
+          
+                &:hover {
+                  transform: translateY(-10px);
+                  background-color: rgb(219, 235, 227);
+
+                }
+          
+                img {
+                  width: 100%;
+                  height: 350px;
+                  object-fit: cover;
+                  border-radius: 8px 8px 0 0;
+                }
+          
+                h3 {
+                  font-size: 1.5rem;
+                  margin: 15px 0;
+                }
+          
+                p {
+                  font-size: 1rem;
+                  margin-bottom: 20px;
+                }
+
+                .submit-button{
+                    padding: 10px 5px;
+                    width: 100%;
+                    font-size: 13px;
+                    color: #fff;
+                    border: 1px solid;
+                    border-radius: 0px;
+                }
+              }
+            }
+          }
+    }
 
 
     .footer{
@@ -61,9 +145,97 @@
         align-items: center;
         justify-content: center;
         border: solid 0.1mm gray ;
-        margin-top: 10px;
         background-color: azure;
         height: 50px;
+        flex-shrink: 0;
     }
-      
+
+    .register-page{
+        display: flex;
+        flex-grow: 1;
+        align-items: center;
+        justify-content: center;
+    
+        .auth-container{        
+            border: 1px solid;
+            border-radius: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+            height: 480px;  
+            width: 680px;
+            
+            
+            .register-form-container{
+                display: flex;
+                flex-direction: row;
+                gap: 10px;
+                height: 100%;
+                
+
+                .register-form{
+                    flex: 3;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                    padding: 7px;
+
+                    h1{
+                        color: rgb(63, 145, 90)
+                    }
+
+                    input{
+                        background-color: #eee;
+                        border: solid 1px  rgb(63, 145, 90);
+                        margin: 13px 5px;
+                        padding: 10px 15px;
+                        font-size: 13px;
+                        border-radius: 8px;
+                        width: 220px;   // 100% does not work fsr
+                    }
+
+                    .submit-button{
+                        margin-top: 13px;
+                        width: 100px;
+                        color: #fff;
+                    }
+                    
+                    .gmail-button{
+                        font-size: 12px;
+                        padding: 10px 45px;
+                        border: 1px solid;
+                        font-weight: 600;
+                        color: rgb(63, 145, 90);
+                        letter-spacing: 0.5px;
+                        cursor: pointer;
+                        margin-top: 15px;     // this overrides the upper one
+                        width: 250px;
+                    }
+                }
+                .register-info{
+                    flex: 4;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                    background-color: rgb(63, 145, 90); 
+                    border-radius: 150px 30px 30px 150px ;
+                    gap: 10px;
+
+                    .submit-button{   // overrride the original style
+                        color: #fff;
+                        border: 2px solid;   
+                    }
+
+                    h2{
+                        color: #fff; 
+                    }
+
+                    span{
+                        font-size: 17px; 
+                        color: #fff; 
+                    }
+                }
+            }
+        }
+    }     
 }

@@ -381,7 +381,6 @@ function PathFindingVisualizer() {
     clearBoard()
   }
 
-
   return (
     <div className='PathFinder'>
       <div className='setting'>
@@ -430,7 +429,6 @@ function PathFindingVisualizer() {
           <div className='icon path'></div>
           <span>Path</span>
         </div>
-  
       </div>
       <div className='interface'>
         <div className='message-Container'>
@@ -444,7 +442,7 @@ function PathFindingVisualizer() {
         >
           {
             grid.map((eachRow) => 
-              eachRow.map((point) =>  // each point created from createPoint()
+              eachRow.map((point) =>  
               <Point 
                 key={`${point.row}-${point.col}`}     
                 handleMouseDown={handleMouseDown}

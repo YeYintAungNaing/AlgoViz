@@ -10,10 +10,11 @@ function Point({handleMouseDown, handleMouseUp, handleOnMouseEnter, point, cellS
     return (
         <div 
             className={`grid-item ${pointState}`}
-            style={{
+            style=
+            {{
                 width : `${cellSize}px`,
                 height:`${cellSize}px`
-              }}
+            }}
             id={`${row}-${col}`}
             onMouseDown={() => handleMouseDown(row, col)}
             onMouseEnter={() => handleOnMouseEnter(row, col)}
