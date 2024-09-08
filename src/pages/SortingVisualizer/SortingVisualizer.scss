@@ -17,10 +17,15 @@
             width: 80px;
             height: 30px;
             font-size: 12px; 
+            margin: 0 7px;
             border: 1px solid;
             color: rgb(63, 145, 90);
             letter-spacing: 0.5px;
             cursor: pointer;
+
+            &:hover {
+                background-color: #bed8c5; 
+            }
         }
 
         .slider-container{

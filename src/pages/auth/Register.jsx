@@ -11,17 +11,15 @@ function Register() {
         <input placeholder="Name"></input>
         <input placeholder="Password"></input>
         <input placeholder="Comfirm password"></input>
-        <button className="submit-button">Register</button>
-        <Link to='/AlgoViz'><button className="gmail-button">Sign in as a guest user</button></Link>
+        <Link className="link"  to='/AlgoViz'><button className="submit-button">Register</button></Link>
+        <Link className="link"  to='/AlgoViz'><button className="gmail-button">Sign in as a guest user</button></Link>
       </div>
       <div className="register-info">
         <h2>Welcome To AlgoViz</h2>
         <span>Register to use fully enjoy the website features</span>
         <span>Click the button below to sign in instead</span>
-        <button className="submit-button">Sign in</button>
+        <Link className="link"  to='/AlgoViz/login'><button className="submit-button">Sign in</button></Link> 
       </div>         
-    </div>
-    <div className="login-form-container">
     </div>
   </div>
   </div>

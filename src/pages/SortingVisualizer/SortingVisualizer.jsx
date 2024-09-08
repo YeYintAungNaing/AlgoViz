@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './SortingVisualizer.scss'
 import  {bubbleSort}  from '../../algorithms/BubbleSort.js';
 
@@ -6,6 +6,23 @@ function SortingVisualizer() {
 
   const [array, setArray] = useState([]);
   const [arraySize, setArraySize] = useState(10)
+  const [isLoaded, setIsLoaded] = useState(false)
+
+
+  useEffect(()=>{
+    if (!isLoaded) {
+      let generatedArray = []
+      for (let i = 0; i < arraySize ; i++) {          // could have made it better
+        const randomNum = Math.floor(Math.random() * 335) + 5
+        generatedArray.push(randomNum)
+        setArray(generatedArray)
+      }
+      setIsLoaded(true)
+    }
+    
+  }, [isLoaded])
+
+  //console.log('redered')
   
   function generateArray(e) {
     e.preventDefault()
@@ -60,6 +77,21 @@ function SortingVisualizer() {
       }
   }
 
+  function startQuickSort(e) {
+    e.preventDefault()
+    window.alert('Have not implemented yet')
+  }
+
+  function startSelectionSort(e) {
+    e.preventDefault()
+    window.alert('Have not implemented yet')
+  }
+
+  function startMergeSort(e) {
+    e.preventDefault()
+    window.alert('Have not implemented yet')
+  }
+
   
   return (
     <div className="sorting-visualizer">
@@ -76,6 +108,9 @@ function SortingVisualizer() {
           />
         </div>
         <button onClick={startBubbleSort}>Bubble Sort</button>
+        <button onClick={startQuickSort}>Quick Sort</button>
+        <button onClick={startSelectionSort}>Selection Sort</button>
+        <button onClick={startMergeSort}>Merge Sort</button>
       </div>
       <div className="interface">
         {

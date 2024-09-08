@@ -10,6 +10,7 @@ import Documentation from './pages/Documenttation/Documentation';
 import ContactUs from './pages/ContactUs/ContactUs';
 import PathFindingVisualizer from './pages/Pathfinder/PathFinder';
 import Register from './pages/auth/Register';
+import Login from './pages/auth/Login';
 
 
 function App() {
@@ -38,6 +39,10 @@ function App() {
           {
             path : '/AlgoViz/register',
             element : <Register></Register>
+          },
+          {
+            path : '/AlgoViz/login',
+            element : <Login></Login>
           },
           {
             path : '/AlgoViz/sortingVisualizer',

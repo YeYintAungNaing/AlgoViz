@@ -140,14 +140,30 @@
     }
 
 
-    .footer{
+    .footer-container{
+        background-color:rgb(63, 145, 90);
         display: flex;
+        height: 70px;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
-        border: solid 0.1mm gray ;
-        background-color: azure;
-        height: 50px;
         flex-shrink: 0;
+
+        .social-icons{
+            display: flex;
+            gap: 15px;
+            margin-bottom: 10px;
+
+            .icon{
+                color: #eee;
+                size: 10px;
+            }
+        }
+
+        span{
+            font-size: 18px;
+            color: #eee
+        };
     }
 
     .register-page{
@@ -212,6 +228,96 @@
                     }
                 }
                 .register-info{
+                    flex: 4;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                    background-color: rgb(63, 145, 90); 
+                    border-radius: 150px 30px 30px 150px ;
+                    gap: 10px;
+
+                    .submit-button{   // overrride the original style
+                        color: #fff;
+                        border: 2px solid;   
+                    }
+
+                    h2{
+                        color: #fff; 
+                    }
+
+                    span{
+                        font-size: 17px; 
+                        color: #fff; 
+                    }
+                }
+            }
+        }
+    }
+    .login-page{
+        display: flex;
+        flex-grow: 1;
+        align-items: center;
+        justify-content: center;
+    
+        .auth-container{        
+            border: 1px solid;
+            border-radius: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+            height: 480px;  
+            width: 680px;
+            
+            
+            .login-form-container{
+                display: flex;
+                flex-direction: row;
+                gap: 10px;
+                height: 100%;
+                
+
+                .login-form{
+                    flex: 3;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                    padding: 7px;
+
+                    h1{
+                        color: rgb(63, 145, 90);
+                        margin-bottom: 20px;
+                
+                    }
+
+                    input{
+                        background-color: #eee;
+                        border: solid 1px  rgb(63, 145, 90);
+                        margin: 13px 5px;
+                        padding: 10px 15px;
+                        font-size: 13px;
+                        border-radius: 8px;
+                        width: 220px;   // 100% does not work fsr
+                    }
+
+                    .submit-button{
+                        margin-top: 13px;
+                        width: 100px;
+                        color: #fff;
+                    }
+                    
+                    .gmail-button{
+                        font-size: 12px;
+                        padding: 10px 30px;
+                        border: 1px solid;
+                        font-weight: 600;
+                        color: rgb(63, 145, 90);
+                        letter-spacing: 0.5px;
+                        cursor: pointer;
+                        margin-top: 15px;     // this overrides the upper one
+                        width: 250px;
+                    }
+                }
+                .login-info{
                     flex: 4;
                     display: flex;
                     align-items: center;
