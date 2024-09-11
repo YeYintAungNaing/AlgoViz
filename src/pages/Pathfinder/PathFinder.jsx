@@ -24,6 +24,7 @@ function PathFindingVisualizer() {
   // TODO 
   // allow use to move start and end points
   // add more path finding algorithms
+  // making a wall on the path will cause error ( the next algorithm will not remember that wall as wall)
 
   useEffect(()=>{
     if (!gridLoaded){
@@ -275,11 +276,11 @@ function PathFindingVisualizer() {
   }
 
 
-  function clearPath() {
+  function clearPath() {   // clear path and visited nodes
     let updatedGrid = grid.slice()
     for (let eachRow of grid) {
       for (let point of eachRow){
-        let copyPoint = {...point, path : false, visited : false}
+        let copyPoint = {...point, path : false, visited : false, previousPoint : null, distance : Infinity,}
         updatedGrid[point.row][point.col] = copyPoint
       }
     }
@@ -325,7 +326,7 @@ function PathFindingVisualizer() {
     let updatedGrid = grid.slice()
     for (let eachRow of grid) {
       for (let point of eachRow){
-        let copyPoint = {...point, isWall : false, path : false, visited : false}
+        let copyPoint = {...point, isWall : false, path : false, visited : false, previousPoint : null, distance : Infinity,}
         updatedGrid[point.row][point.col] = copyPoint
       }
     }

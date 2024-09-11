@@ -1,6 +1,9 @@
+
+// let test = [1,2,4,5]
+
 export function bubbleSort(array) {
     let numSwaps = []
-    for (let i = 0; i < array.length - 1 ; i++) {
+    for (let i = 0; i < array.length -1  ; i++) {
         for (let j=0; j < array.length - i - 1 ; j++) {
             if (array[j] > array[j+1]) { 
                 numSwaps.push([j, j+1, true])
