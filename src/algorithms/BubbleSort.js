@@ -1,5 +1,5 @@
 
-// let test = [1,2,4,5]
+// let test = [12,3,66]
 
 export function bubbleSort(array) {
     let numSwaps = []
@@ -19,7 +19,7 @@ export function bubbleSort(array) {
     return numSwaps
 }
 
-//console.log(bubbleSort(array))
+//console.log(bubbleSort(test))
 //console.log(numSwaps)
 
 // function getSwapNumPairs() {

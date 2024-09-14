@@ -2,12 +2,16 @@ import { useEffect, useState } from 'react'
 import './SortingVisualizer.scss'
 import  {bubbleSort}  from '../../algorithms/BubbleSort.js';
 import { selectionSort } from '../../algorithms/Selection.js';
+import 'prismjs/themes/prism.css'; 
+import Prism from 'prismjs';
 
 function SortingVisualizer() {
 
   const [array, setArray] = useState([]);
   const [arraySize, setArraySize] = useState(10)
   const [isLoaded, setIsLoaded] = useState(false)
+  const [isAnimating, setIsAnimating] = useState(false)
+  const [message, setMessage] = useState('')
 
 
   useEffect(()=>{
@@ -22,6 +26,22 @@ function SortingVisualizer() {
     }
     
   }, [isLoaded])
+
+  useEffect(() => {
+    Prism.highlightAll();  // Ensures Prism.js highlights the code when the component is mounted
+  }, []);
+
+  const codeSnippet = `
+    for (let i = 0; i < array.length -1; i++) {
+      for (let j = 0; j < array.length - i - 1; j++) 
+        if (array[j] > array[j + 1]) {
+          let tempNum = array[j];
+          array[j] = array[j + 1];
+          array[j + 1] = tempNum;
+        }
+      }
+    }
+  `;
 
   //console.log('redered')
   
@@ -42,45 +62,18 @@ function SortingVisualizer() {
 
   function startBubbleSort(e) {
       e.preventDefault()
-      let copyArray = array.slice()
-      let swap = bubbleSort(copyArray)  
-      //console.log(swap)
-      for (let i = 0; i < swap.length; i++) {
-        setTimeout(() => {
-
-          // if (swap[i][1]=== 'sorted') {
-          //   document.getElementById(swap[i][0]).className = 'sorting-bar sorted'
-          // }
-
-          const [barOneIndex, barTwoIndex, isSwapped] = swap[i]
-          document.getElementById(barOneIndex).className = 'sorting-bar comparing'   // immediately hightlight the comparing pair
-          document.getElementById(barTwoIndex).className = 'sorting-bar comparing'
-
-
-          if (isSwapped) {
-            
-            const barOne = document.getElementById(barOneIndex)
-            const barTwo = document.getElementById(barTwoIndex)
-
-
-            setTimeout(() => {
-              const barOneHeight = barOne.style.height;          // swapped after a certain time
-              const barTwoHeight = barTwo.style.height;
-  
-              barOne.style.height = barTwoHeight;
-              barTwo.style.height = barOneHeight; 
-              document.getElementById(barOneIndex).className = 'sorting-bar swapped'
-              document.getElementById(barTwoIndex).className = 'sorting-bar swapped' 
-            }, 300);
-          }
-          setTimeout(() => {
-            document.getElementById(barOneIndex).classList.remove('comparing', 'swapped');
-            document.getElementById(barTwoIndex).classList.remove('comparing', 'swapped');
-          }, 700); 
-
-        }, 1000 * i);   // total time for each comparison pair ( make sure all the animation time in this block is shorter than this)
+      if(isAnimating) {
+        setMessage('Animation and state updating are in process.. pls wait')
+        return
       }
+      setIsAnimating(true)
+      let copyArray = array.slice()
+      let swapHistory = bubbleSort(copyArray)  
+      //console.log(swapHistory)
+      animateSorting(swapHistory, copyArray)
+     
   }
+  //console.log(array)
 
   function startQuickSort(e) {
     e.preventDefault()
@@ -89,45 +82,61 @@ function SortingVisualizer() {
 
   function startSelectionSort(e) {
     e.preventDefault()
+    if(isAnimating) {
+      setMessage('Animation and state updating are in process.. pls wait')
+      return
+    }
+
+    setIsAnimating(true)
+   
     let copyArray = array.slice()
-      let swap = selectionSort(copyArray)  
-      console.log(swap)
-      for (let i = 0; i < swap.length; i++) {
-        setTimeout(() => {
-
-          const [barOneIndex, barTwoIndex, isSwapped] = swap[i]
-          document.getElementById(barOneIndex).className = 'sorting-bar comparing'   // immediately hightlight the comparing pair
-          document.getElementById(barTwoIndex).className = 'sorting-bar comparing'
-
-
-          if (isSwapped) {
-            
-            const barOne = document.getElementById(barOneIndex)
-            const barTwo = document.getElementById(barTwoIndex)
-
-
-            setTimeout(() => {
-              const barOneHeight = barOne.style.height;          // swapped after a certain time
-              const barTwoHeight = barTwo.style.height;
-  
-              barOne.style.height = barTwoHeight;
-              barTwo.style.height = barOneHeight; 
-              document.getElementById(barOneIndex).className = 'sorting-bar swapped'
-              document.getElementById(barTwoIndex).className = 'sorting-bar swapped' 
-            }, 300);
-          }
-          setTimeout(() => {
-            document.getElementById(barOneIndex).classList.remove('comparing', 'swapped');
-            document.getElementById(barTwoIndex).classList.remove('comparing', 'swapped');
-          }, 700); 
-
-        }, 1000 * i);   // total time for each comparison pair ( make sure all the animation time in this block is shorter than this)
-      }
+    let swapHistory = selectionSort(copyArray)  
+    animateSorting(swapHistory, copyArray)
   }
 
   function startMergeSort(e) {
     e.preventDefault()
     window.alert('Have not implemented yet')
+  }
+
+  function animateSorting(swapHistory, sortedArray) {
+    for (let i = 0; i < swapHistory.length; i++) {
+      setTimeout(() => {
+
+        const [barOneIndex, barTwoIndex, isSwapped] = swapHistory[i]
+        document.getElementById(barOneIndex).className = 'sorting-bar comparing'   // immediately hightlight the comparing pair
+        document.getElementById(barTwoIndex).className = 'sorting-bar comparing'
+
+
+        if (isSwapped) {
+          
+          const barOne = document.getElementById(barOneIndex)
+          const barTwo = document.getElementById(barTwoIndex)
+
+          setTimeout(() => {
+            const barOneHeight = barOne.style.height;          // swapped after a certain time
+            const barTwoHeight = barTwo.style.height;
+
+            barOne.style.height = barTwoHeight;
+            barTwo.style.height = barOneHeight; 
+            document.getElementById(barOneIndex).className = 'sorting-bar swapped'
+            document.getElementById(barTwoIndex).className = 'sorting-bar swapped' 
+          }, 300);
+        }
+        setTimeout(() => {
+          document.getElementById(barOneIndex).classList.remove('comparing', 'swapped');
+          document.getElementById(barTwoIndex).classList.remove('comparing', 'swapped');
+        }, 700); 
+
+      }, 1000 * i);   // total time for each comparison pair ( make sure all the animation time in this block is shorter than this)
+
+      if (i === swapHistory.length - 1) {
+        setTimeout(() => {
+          setArray(sortedArray)
+          setIsAnimating(false)   
+        }, 1100 * i);   // if the timing is off, the last swap will happen after the array state update and messed up the last two bar order
+      }
+    }
   }
 
   
@@ -140,7 +149,7 @@ function SortingVisualizer() {
           <input
             type="range"
             min="2"
-            max="50"
+            max="30"
             value={arraySize}
             onChange={handleSliderChange}
           />
@@ -164,6 +173,14 @@ function SortingVisualizer() {
           }
       </div>
       <div className="explanation">
+        <div className='word-explanation'>
+          <div>{message}</div>
+        </div>
+        <pre className='code-explanation'>
+          <code className="language-javascript">
+            {codeSnippet}
+          </code>
+        </pre>
       </div>
     </div>
   )

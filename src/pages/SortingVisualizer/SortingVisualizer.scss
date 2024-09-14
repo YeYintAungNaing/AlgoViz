@@ -67,7 +67,34 @@
         }
       }
 
-    .explanation{
-        height: 400px;
-    }
+      .explanation {
+        display: flex;
+        flex-direction: row;
+        height: 300px; 
+        margin-top: 30px;
+
+        .word-explanation {
+            flex: 4;
+            height: 100%;
+            background-color: #bed8c5;
+
+        }
+    
+        .code-explanation {
+            flex: 2;
+            background-color: #f6faf7;
+            padding: 0;       // without this the scroll bar will be covered by the footer 
+            margin: 0;
+            height: 300px;
+            overflow-x: auto;
+            
+            
+          
+          code {
+            font-family: 'Monaco', 'Consolas', monospace;
+            color: #24292e;
+            font-size: 16px;
+          }
+        }  
+      }
 }
