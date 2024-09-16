@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import './SortingVisualizer.scss'
-import  {bubbleSort}  from '../../algorithms/BubbleSort.js';
-import { selectionSort } from '../../algorithms/Selection.js';
+import  {bubbleSort, bubbleSortcodeSnippet}  from '../../algorithms/BubbleSort.js';
+import { selectionSort, selectionSortCodeSnippet } from '../../algorithms/Selection.js';
 import 'prismjs/themes/prism.css'; 
 import Prism from 'prismjs';
 
@@ -12,6 +12,9 @@ function SortingVisualizer() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
   const [message, setMessage] = useState('')
+  const [currentAlgo, setCurrentAlgo] = useState('')
+  const [explanation, setExplanation] = useState(['', null])
+  const [speed, setSpeed] = useState(1000)
 
 
   useEffect(()=>{
@@ -27,23 +30,21 @@ function SortingVisualizer() {
     
   }, [isLoaded])
 
-  useEffect(() => {
-    Prism.highlightAll();  // Ensures Prism.js highlights the code when the component is mounted
-  }, []);
-
-  const codeSnippet = `
-    for (let i = 0; i < array.length -1; i++) {
-      for (let j = 0; j < array.length - i - 1; j++) 
-        if (array[j] > array[j + 1]) {
-          let tempNum = array[j];
-          array[j] = array[j + 1];
-          array[j + 1] = tempNum;
-        }
-      }
+  useEffect(()=>{
+    if (currentAlgo === 'bubbleSort') {
+      setExplanation(['bubbleSort', bubbleSortcodeSnippet])
     }
-  `;
+    else if (currentAlgo === 'selectionSort') {
+      setExplanation(['selectionSort', selectionSortCodeSnippet])
+    }
 
-  //console.log('redered')
+  }, [currentAlgo])
+
+  useEffect(() => {
+    Prism.highlightAll();  // highlights the code whenever explanation[1] is changed
+  }, [explanation]);
+
+  //console.log('rendered')
   
   function generateArray(e) {
     e.preventDefault()
@@ -60,6 +61,22 @@ function SortingVisualizer() {
     setArraySize(e.target.value)
   }
 
+  function handleSpeedChange(e) {
+    const value = e.target.value;
+    if (value === 'slow') {
+      setSpeed(1000);
+    } 
+    else if (value === 'normal') {
+      setSpeed(600);
+    } 
+    else if (value === 'fast') {
+      setSpeed(300);
+    } 
+    else if (value === 'superfast') {
+      setSpeed(50);
+    }
+  }
+
   function startBubbleSort(e) {
       e.preventDefault()
       if(isAnimating) {
@@ -67,6 +84,7 @@ function SortingVisualizer() {
         return
       }
       setIsAnimating(true)
+      setCurrentAlgo('bubbleSort')
       let copyArray = array.slice()
       let swapHistory = bubbleSort(copyArray)  
       //console.log(swapHistory)
@@ -88,7 +106,7 @@ function SortingVisualizer() {
     }
 
     setIsAnimating(true)
-   
+    setCurrentAlgo('selectionSort')
     let copyArray = array.slice()
     let swapHistory = selectionSort(copyArray)  
     animateSorting(swapHistory, copyArray)
@@ -98,6 +116,7 @@ function SortingVisualizer() {
     e.preventDefault()
     window.alert('Have not implemented yet')
   }
+  //console.log(explanation)
 
   function animateSorting(swapHistory, sortedArray) {
     for (let i = 0; i < swapHistory.length; i++) {
@@ -121,20 +140,20 @@ function SortingVisualizer() {
             barTwo.style.height = barOneHeight; 
             document.getElementById(barOneIndex).className = 'sorting-bar swapped'
             document.getElementById(barTwoIndex).className = 'sorting-bar swapped' 
-          }, 300);
+          }, speed * 0.3);
         }
         setTimeout(() => {
           document.getElementById(barOneIndex).classList.remove('comparing', 'swapped');
           document.getElementById(barTwoIndex).classList.remove('comparing', 'swapped');
-        }, 700); 
+        }, speed * 0.7); 
 
-      }, 1000 * i);   // total time for each comparison pair ( make sure all the animation time in this block is shorter than this)
+      }, speed * i);   // total time for each comparison pair ( make sure all the animation time in this block is shorter than this)
 
       if (i === swapHistory.length - 1) {
         setTimeout(() => {
           setArray(sortedArray)
           setIsAnimating(false)   
-        }, 1100 * i);   // if the timing is off, the last swap will happen after the array state update and messed up the last two bar order
+        }, speed * 1.2 * i);   // if the timing is off, the last swap will happen after the array state update and messed up the last two bar order
       }
     }
   }
@@ -153,6 +172,14 @@ function SortingVisualizer() {
             value={arraySize}
             onChange={handleSliderChange}
           />
+        </div>
+        <div className='adjustSpeed'>
+          <select onChange={handleSpeedChange}>
+            <option value="slow">Slow</option>
+            <option value="normal">Normal</option>
+            <option value="fast">Fast</option>
+            <option value="superfast">Super Fast</option>
+          </select>
         </div>
         <button onClick={startBubbleSort}>Bubble Sort</button>
         <button onClick={startQuickSort}>Quick Sort</button>
@@ -174,11 +201,11 @@ function SortingVisualizer() {
       </div>
       <div className="explanation">
         <div className='word-explanation'>
-          <div>{message}</div>
+          <div>{explanation[0]}</div>
         </div>
         <pre className='code-explanation'>
           <code className="language-javascript">
-            {codeSnippet}
+          {explanation[1]}
           </code>
         </pre>
       </div>

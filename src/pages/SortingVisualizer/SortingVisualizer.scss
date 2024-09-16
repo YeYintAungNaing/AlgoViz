@@ -28,6 +28,26 @@
             }
         }
 
+        .adjustSpeed {
+            margin: 0px 5px;
+
+            select{
+                height: 30px;
+                border: 1px solid rgb(63, 145, 90);
+                
+                width: 100px;
+                background-color: #f5f5f5;
+                color: rgb(63, 145, 90);
+                padding: 0px 5px;
+                font-size: 12px;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: #bed8c5;
+                }
+            }
+        }
+
         .slider-container{
             margin: 0 10px;
             display: flex;
@@ -86,6 +106,7 @@
             padding: 0;       // without this the scroll bar will be covered by the footer 
             margin: 0;
             height: 300px;
+            padding-left: 20px;
             overflow-x: auto;
             
             

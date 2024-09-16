@@ -20,10 +20,23 @@ export function selectionSort(array) {
         numSwaps.push([i, minIndex, true])
         array[minIndex] =  array[i]
         array[i] = minNum
-
     }
     return numSwaps
     //return array
 }
 
 //console.log(selectionSort(arr))
+
+export const selectionSortCodeSnippet = `
+for (let i = 0; i < array.length-1 ;  i++) {
+        let minNum = array[i]
+        let minIndex = i  
+        for (let j = i; j < array.length - 1; j++) {
+            if (minNum > array[j+1]) {
+                minNum = array[j+1]
+                minIndex = j + 1
+            }
+        }
+        array[minIndex] =  array[i]
+        array[i] = minNum
+}`

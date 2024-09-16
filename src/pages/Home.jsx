@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom"
-import placeHolderTom from "../imgs/placeholder.jpeg"
 import sortingImg from "../imgs/sortingImg.png"
 import pathFinderImg from "../imgs/pathfinderImg.png"
 import dsImg from "../imgs/DsImg.png"
