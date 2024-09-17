@@ -61,6 +61,13 @@
         }
     }
 
+    .algoInfo{
+        height: 34px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
     .interface {
         height: 350px;
         display: flex;
@@ -90,13 +97,26 @@
       .explanation {
         display: flex;
         flex-direction: row;
-        height: 300px; 
+        height: 280px; 
         margin-top: 30px;
 
         .word-explanation {
             flex: 4;
             height: 100%;
             background-color: #bed8c5;
+            padding: 10px 15px;
+
+            h2{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 10px;
+            }
+
+            .step{
+                font-size: 21px;
+                margin-bottom: 5px;
+            }
 
         }
     

@@ -40,3 +40,13 @@ for (let i = 0; i < array.length-1 ;  i++) {
         array[minIndex] =  array[i]
         array[i] = minNum
 }`
+
+export const selectionSortSteps = [
+    `1. Start by finding the smallest element in the array.`,
+    `2. Swap the smallest element with the first element of the array.`,
+    `3. Move to the next unsorted part of the array.`,
+    `4. Again, find the smallest element in the remaining unsorted section and swap it with the first element of that section.`,
+    `5. Repeat the process until all elements are sorted.`,
+    `6. The array is sorted when all elements have been selected and swapped into the correct order.`
+]
+

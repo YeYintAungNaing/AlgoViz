@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, ReactDOM } from 'react'
 import './SortingVisualizer.scss'
-import  {bubbleSort, bubbleSortcodeSnippet}  from '../../algorithms/BubbleSort.js';
-import { selectionSort, selectionSortCodeSnippet } from '../../algorithms/Selection.js';
+import  {bubbleSort, bubbleSortcodeSnippet, bubbleSortSteps}  from '../../algorithms/BubbleSort.js';
+import { selectionSort, selectionSortCodeSnippet, selectionSortSteps } from '../../algorithms/Selection.js';
 import 'prismjs/themes/prism.css'; 
 import Prism from 'prismjs';
 
@@ -11,9 +11,9 @@ function SortingVisualizer() {
   const [arraySize, setArraySize] = useState(10)
   const [isLoaded, setIsLoaded] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState('This is the message container')
   const [currentAlgo, setCurrentAlgo] = useState('')
-  const [explanation, setExplanation] = useState(['', null])
+  const [explanation, setExplanation] = useState([null, null])
   const [speed, setSpeed] = useState(1000)
 
 
@@ -32,10 +32,10 @@ function SortingVisualizer() {
 
   useEffect(()=>{
     if (currentAlgo === 'bubbleSort') {
-      setExplanation(['bubbleSort', bubbleSortcodeSnippet])
+      setExplanation([bubbleSortSteps, bubbleSortcodeSnippet])
     }
     else if (currentAlgo === 'selectionSort') {
-      setExplanation(['selectionSort', selectionSortCodeSnippet])
+      setExplanation([selectionSortSteps, selectionSortCodeSnippet])
     }
 
   }, [currentAlgo])
@@ -44,7 +44,7 @@ function SortingVisualizer() {
     Prism.highlightAll();  // highlights the code whenever explanation[1] is changed
   }, [explanation]);
 
-  //console.log('rendered')
+  console.log('rendered')
   
   function generateArray(e) {
     e.preventDefault()
@@ -119,6 +119,7 @@ function SortingVisualizer() {
   //console.log(explanation)
 
   function animateSorting(swapHistory, sortedArray) {
+    let totalAnimationTime = (swapHistory.length - 1) * speed * 1.2;
     for (let i = 0; i < swapHistory.length; i++) {
       setTimeout(() => {
 
@@ -147,14 +148,22 @@ function SortingVisualizer() {
           document.getElementById(barTwoIndex).classList.remove('comparing', 'swapped');
         }, speed * 0.7); 
 
+        if (i === swapHistory.length - 1) {
+          setTimeout(() => {
+            setArray(sortedArray);  
+            setIsAnimating(false);  
+            setMessage(`${totalAnimationTime / 1000} seconds`);
+          }, speed * 0.8);  
+        }
       }, speed * i);   // total time for each comparison pair ( make sure all the animation time in this block is shorter than this)
 
-      if (i === swapHistory.length - 1) {
-        setTimeout(() => {
-          setArray(sortedArray)
-          setIsAnimating(false)   
-        }, speed * 1.2 * i);   // if the timing is off, the last swap will happen after the array state update and messed up the last two bar order
-      }
+      // if (i === swapHistory.length - 1) {
+      //   setTimeout(() => {
+      //     setArray(sortedArray)
+      //     setIsAnimating(false)
+      //     setMessage(`${totalAnimationTime / 1000} seconds`)  
+      //   }, speed * 1.2 * i);   // if the timing is off, the last swap will happen after the array state update and messed up the last two bars order
+      // }
     }
   }
 
@@ -186,6 +195,7 @@ function SortingVisualizer() {
         <button onClick={startSelectionSort}>Selection Sort</button>
         <button onClick={startMergeSort}>Merge Sort</button>
       </div>
+      <div className='algoInfo'><h3>{message}</h3></div>
       <div className="interface">
         {
           array.length > 0 &&
@@ -201,7 +211,13 @@ function SortingVisualizer() {
       </div>
       <div className="explanation">
         <div className='word-explanation'>
-          <div>{explanation[0]}</div>
+          <h2>Algorithm explanation</h2>
+            {
+              explanation[0] &&
+              explanation[0].map((eachStep, i) => 
+                <div key={i} className='step'>{eachStep}</div>
+              )
+            }
         </div>
         <pre className='code-explanation'>
           <code className="language-javascript">
