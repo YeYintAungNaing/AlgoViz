@@ -1,3 +1,141 @@
-.code-editor-container{
-    margin-top: 30px;
+.my-sorting-visualizer{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+
+    .setting{
+        height: 70px;
+        border: 1px solid;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: row;
+
+        button{
+            width: 80px;
+            height: 30px;
+            font-size: 12px; 
+            margin: 0 7px;
+            border: 1px solid;
+            color: rgb(63, 145, 90);
+            letter-spacing: 0.5px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #bed8c5; 
+            }
+        }
+
+        .adjustSpeed {
+            margin: 0px 5px;
+
+            select{
+                height: 30px;
+                border: 1px solid rgb(63, 145, 90);
+                
+                width: 100px;
+                background-color: #f5f5f5;
+                color: rgb(63, 145, 90);
+                padding: 0px 5px;
+                font-size: 12px;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: #bed8c5;
+                }
+            }
+        }
+
+        .slider-container{
+            margin: 0 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;   // between slider and lable
+
+            p{
+                width: 20px;
+            }
+        }
+    }
+
+    .algoInfo{
+        height: 34px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .interface {
+        height: 350px;
+        display: flex;
+        align-items: flex-end;
+        gap: 5px;
+        justify-content: center;
+    
+        .sorting-bar {
+            background-color: #304962;
+            width: 40px;
+            transition: height 0.3s ease;
+        }
+
+        .sorting-bar.comparing {
+            background-color: #ef3602
+        }
+
+        .sorting-bar.swapped {
+            background-color: #6c04f3
+        }
+        
+        .sorting-bar.sorted {
+            background-color: rgb(63, 145, 90);
+        }
+      }
+
+    
+    .code-implementaion-container{
+        margin-top: 30px;
+        height: 500px;
+        padding: 0;
+        
+        display: flex;
+        flex-direction: row;
+
+        .code-editor-container{
+            flex: 3;
+            height: 100%;
+        }
+
+        .implementation-guide{
+            flex: 2;
+            background-color: #bed8c5;
+            height: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+
+            h2{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 5px;
+            }
+            
+
+            p{  
+                font-size: 18px;
+                margin-bottom: 10px;
+            }
+
+            h3 {
+                text-indent: 20px; 
+            }
+
+            li{    
+                font-size: 17px;
+            }
+        }
+    }
 }
+
+
+

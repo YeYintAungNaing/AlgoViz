@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import Editor from '@monaco-editor/react';
 import './MyAlgorithm.scss'
-import { selectionSortSteps } from '../../algorithms/Selection';
+
 
 function MyAlgorithm() {
 
@@ -11,17 +11,22 @@ function MyAlgorithm() {
     const [isAnimating, setIsAnimating] = useState(false)
     const [message, setMessage] = useState('This is the message container')
     const [speed, setSpeed] = useState(1000)
-    const [code, setCode] = useState('function myAlgorithm(array) {\n  // Implement  logic here\n}');
-
-
+    const [code, setCode] = useState(
+      `async function myAlgorithm(array) {
+      for (let i = 0; i < array.length - 1; i++) {
+        for (let j = 0; j < array.length - i - 1; j++) {
+          if (array[j] > array[j + 1]) {
+            await swap(array, j, j + 1);
+          }
+        }
+      }
+    }`
+    );
 
     const handleEditorChange = (value) => {
       setCode(value);
     };
 
-    // function swap(i, j) {
-    //   console.log(i, j)
-    // }
   
     // function runCode() {
     //   try {
@@ -92,8 +97,7 @@ function MyAlgorithm() {
            
             document.getElementById(i).classList.remove('swapped');  // remove the color after delay
             document.getElementById(j).classList.remove('swapped');
-          },
-          Array: Array // Allow usage of the Array object
+          }
         };
     
         const sandboxKeys = Object.keys(sandbox);
@@ -137,6 +141,7 @@ function MyAlgorithm() {
         setIsAnimating(false)
       } catch (err) {
         // Log any error in the execution and display a message
+        setIsAnimating(false)
         console.error('Error in executing the code:', err);
         setMessage('Error in the user algorithm. Check console for details.');
       }
@@ -192,7 +197,7 @@ function MyAlgorithm() {
   }
 
   return (
-    <div className="sorting-visualizer">
+    <div className="my-sorting-visualizer">
       <div className="setting">
         <button onClick={generateArray}>Generate</button>
         <div className="slider-container">
@@ -229,17 +234,49 @@ function MyAlgorithm() {
             ))
           }
       </div>
+      <div className='code-implementaion-container'>
       <div className='code-editor-container'>
-      <Editor
-        height="400px"
-        defaultLanguage="javascript"
-        defaultValue={code}
-        theme="vs-dark"
-        onChange={handleEditorChange}
-      />
+        <Editor
+          defaultLanguage="javascript"
+          defaultValue={code}
+          theme="vs-dark"
+          onChange={handleEditorChange}
+
+          options={{
+            fontSize: 20, // Set default font size
+            scrollbar: {
+              
+              handleMouseWheel: true, // Enable mouse wheel scrolling
+              alwaysConsumeMouseWheel: true,   // this will cause scrolling inside the editor to not move the entire screen
+            },
+            minimap: {
+              enabled: false, // Disable minimap for a cleaner look
+            },
+          }}
+        />
+      </div>
+      <div className='implementation-guide'>
+        <h2>Implementation guide</h2>
+          <p>In this section, user will be able to implment thier own sorting algorithm and 
+             the system will try to visualize it on the above interface. User will be alble
+             to use swap(array, i, j) method provided by the system. The function take three
+             arguments, the entire array you are trying to sort and the two indices of the numbers
+             that you you would like to swap. The function will swap the two numbers while 
+             triggering animation at the same time. You can control the delay between each animation 
+             call by using the speed slider above the sorting bars interface. Some of the functions 
+             like window, fetch, localStorage, Function are disable in the interface becuase of 
+             security reasons. Once you finished writing the code, you can start it by clicking
+             Start my algorithm button in the setting bar above. Enjoy!
+          </p>
+          <h3> Here some of the common issues you could face during implementaion</h3>
+          <li>Make sure the main fucntion name is myAlgorithm(array) and it takes exactly one array arguemnt </li>
+          <li>The main function has to be async function. Check the async keyword before the main function in case you accidently deleted it</li>
+          <li>All the swapping animations will play at the same time if you did not use await keyword before using swap function </li>
+          <li>Make sure the arguments of swap fucntion are correct. They must me an array and the two indices of the numbers you want to swap, do not pass the actual number, it has to be thier indices </li>
+      </div>
       </div>
     </div>
-  )
+  ) 
 }
 
 export default MyAlgorithm
