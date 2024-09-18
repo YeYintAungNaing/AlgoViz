@@ -1,4 +1,4 @@
-import { useEffect, useState, ReactDOM } from 'react'
+import { useEffect, useState } from 'react'
 import './SortingVisualizer.scss'
 import  {bubbleSort, bubbleSortcodeSnippet, bubbleSortSteps}  from '../../algorithms/BubbleSort.js';
 import { selectionSort, selectionSortCodeSnippet, selectionSortSteps } from '../../algorithms/Selection.js';
@@ -48,6 +48,10 @@ function SortingVisualizer() {
   
   function generateArray(e) {
     e.preventDefault()
+    if(isAnimating) {
+      setMessage('Animation and state updating are in process.. pls wait')
+      return
+    }
     let generatedArray = []
     for (let i = 0; i < arraySize ; i++) {
       const randomNum = Math.floor(Math.random() * 335) + 5
@@ -62,6 +66,7 @@ function SortingVisualizer() {
   }
 
   function handleSpeedChange(e) {
+  
     const value = e.target.value;
     if (value === 'slow') {
       setSpeed(1000);
@@ -119,7 +124,7 @@ function SortingVisualizer() {
   //console.log(explanation)
 
   function animateSorting(swapHistory, sortedArray) {
-    let totalAnimationTime = (swapHistory.length - 1) * speed * 1.2;
+    let totalAnimationTime = (swapHistory.length - 1) * speed;
     for (let i = 0; i < swapHistory.length; i++) {
       setTimeout(() => {
 
@@ -148,12 +153,12 @@ function SortingVisualizer() {
           document.getElementById(barTwoIndex).classList.remove('comparing', 'swapped');
         }, speed * 0.7); 
 
-        if (i === swapHistory.length - 1) {
+        if (i === swapHistory.length - 1) {  // update the array state at the last index
           setTimeout(() => {
             setArray(sortedArray);  
             setIsAnimating(false);  
             setMessage(`${totalAnimationTime / 1000} seconds`);
-          }, speed * 0.8);  
+          }, speed * 0.8);    //update after the removing the animation color of last iteration
         }
       }, speed * i);   // total time for each comparison pair ( make sure all the animation time in this block is shorter than this)
 
