@@ -11,6 +11,8 @@ function SortingVisualizer() {
   const [arraySize, setArraySize] = useState(10)
   const [isLoaded, setIsLoaded] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
+  const [isChecked, setIsChecked] = useState(false);
+  const [userArray, setUserArray] = useState([])
   const [message, setMessage] = useState('This is the message container')
   const [currentAlgo, setCurrentAlgo] = useState('')
   const [explanation, setExplanation] = useState([null, null])
@@ -45,6 +47,14 @@ function SortingVisualizer() {
   }, [explanation]);
 
   console.log('rendered')
+
+  function handleCheckboxChange(e) {
+    setIsChecked(e.target.checked);
+  }
+
+  function handleUserInputChange(e) {
+    setUserArray(e.target.value)
+  }
   
   function generateArray(e) {
     e.preventDefault()
@@ -60,6 +70,12 @@ function SortingVisualizer() {
     setArray(generatedArray)
   }
   //console.log(array)
+
+  function handleInsert(e) {
+    e.preventDefault()
+    const numberArray = userArray.split(',').map(num => Number(num));
+    setArray(numberArray);
+  }
   
   function handleSliderChange(e) {
     setArraySize(e.target.value)
@@ -176,17 +192,37 @@ function SortingVisualizer() {
   return (
     <div className="sorting-visualizer">
       <div className="setting">
-        <button onClick={generateArray}>Generate</button>
-        <div className="slider-container">
-          <p>{arraySize}</p>
-          <input
-            type="range"
-            min="2"
-            max="30"
-            value={arraySize}
-            onChange={handleSliderChange}
-          />
-        </div>
+      <div className="checkbox-container">
+        <input 
+          type="checkbox" 
+          id="featureCheckbox" 
+          checked={isChecked} 
+          onChange={handleCheckboxChange} 
+        />
+        <label htmlFor="featureCheckbox" className="checkbox-label">
+          Insert your own array
+        </label>
+      </div>
+        {
+        isChecked?   
+          <button onClick={handleInsert}>Insert</button>:
+          <button onClick={generateArray}>Generate</button>
+        }
+        <div className='array-generator'>
+          {
+            isChecked? <input className='userArrayInput' value={userArray} onChange={handleUserInputChange}></input> : 
+            <div className="slider-container">
+            <p>{arraySize}</p>
+            <input
+              type="range"
+              min="2"
+              max="30"
+              value={arraySize}
+              onChange={handleSliderChange}
+            />
+          </div>
+          }
+        </div>      
         <div className='adjustSpeed'>
           <select onChange={handleSpeedChange}>
             <option value="slow">Slow</option>

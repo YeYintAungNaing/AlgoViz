@@ -20,7 +20,7 @@ function App() {
         <>
           <NavBar/>
           <div className='page-container'>
-            <Outlet/>
+             <Outlet/>        {/*placeholder for the child routes */}
           </div>
           <Footer/>
         </>
@@ -30,7 +30,7 @@ function App() {
     const router = createBrowserRouter([
       {
         path : '/AlgoViz',
-        element : <Layout/>,
+        element : <Layout/>,                // whenever a user navigates to any URL starting with /AlgoViz, the Layout component will be rendered.
         children : [
           {
             path : '/AlgoViz',

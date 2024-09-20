@@ -11,6 +11,15 @@
         justify-content: center;
         flex-direction: row;
 
+        .checkbox-container{
+            display: flex;
+            gap: 5px;
+
+            input{
+                cursor: pointer;
+            }
+        }
+
         button{
             width: 80px;
             height: 30px;
@@ -46,17 +55,30 @@
             }
         }
 
-        .slider-container{
+        .array-generator{
             margin: 0 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 5px;   // between slider and lable
+            width: 170px;
 
-            p{
-                width: 20px;
+
+            .slider-container{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 5px;   // between slider and lable
+    
+                p{
+                    width: 20px;
+                }
             }
+
+            .userArrayInput{
+                height: 30px;
+            }
+
+
         }
+
+       
     }
 
     .algoInfo{

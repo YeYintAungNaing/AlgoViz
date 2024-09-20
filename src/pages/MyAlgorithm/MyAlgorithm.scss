@@ -79,14 +79,17 @@
             transition: height 0.3s ease;
         }
 
+
         .sorting-bar.comparing {
             background-color: #ef3602
         }
 
+
         .sorting-bar.swapped {
             background-color: #6c04f3
         }
-        
+
+    
         .sorting-bar.sorted {
             background-color: rgb(63, 145, 90);
         }
