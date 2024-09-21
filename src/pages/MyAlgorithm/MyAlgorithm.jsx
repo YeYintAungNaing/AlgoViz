@@ -59,7 +59,9 @@ function MyAlgorithm() {
     //       Array: Array // Allow usage of the Array object
     //     };
 
-
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
     async function runCode() {
 
@@ -70,10 +72,7 @@ function MyAlgorithm() {
 
       setIsAnimating(true)
 
-      function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-      }
-  
+      
       try {
         // Define the sandbox environment with allowed functions
         const sandbox = {
@@ -85,6 +84,7 @@ function MyAlgorithm() {
             const barOne = document.getElementById(i)
             const barTwo = document.getElementById(j)
 
+
             document.getElementById(i).className = 'sorting-bar swapped'  // color the swapped bar immediately
             document.getElementById(j).className = 'sorting-bar swapped'
 
@@ -93,7 +93,7 @@ function MyAlgorithm() {
             barOne.style.height = barTwoHeight;
             barTwo.style.height = barOneHeight; 
 
-            await sleep(speed*0.7)   // wait for delay
+            await sleep(speed*0.8)   // wait for delay
            
             document.getElementById(i).classList.remove('swapped');  // remove the color after delay
             document.getElementById(j).classList.remove('swapped');
@@ -136,8 +136,21 @@ function MyAlgorithm() {
         let copyArray = array.slice()
         await userFunction(copyArray, sandbox.swap);
     
-        
-        setMessage('Algorithm executed successfully.');
+        for (let i = 0; i < copyArray.length ; i++) {
+          if (copyArray[i] > copyArray[i+1]) {
+            setMessage('The array is incorrectly sorted, please check your algorithm again!')
+            setArray(copyArray)
+            setIsAnimating(false)
+            return
+          }
+          else{
+            document.getElementById(i).className = 'sorting-bar sorted'
+            await sleep(200)
+            document.getElementById(i).classList.remove('sorted');
+          }
+        }  
+        setMessage('Array is sorted correctly. Good job. You can save your algorithm by click the save button above')
+        setArray(copyArray)
         setIsAnimating(false)
       } catch (err) {
         // Log any error in the execution and display a message
@@ -146,8 +159,8 @@ function MyAlgorithm() {
         setMessage('Error in the user algorithm. Check console for details.');
       }
     }
-   
 
+   
     useEffect(()=>{
       if (!isLoaded) {
         let generatedArray = []

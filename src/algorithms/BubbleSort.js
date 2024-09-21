@@ -2,28 +2,28 @@
 // let test = [12,3,66]
 
 export function bubbleSort(array) {
-    let numSwaps = []
+    let swapHistory = []
     for (let i = 0; i < array.length -1  ; i++) {
         for (let j=0; j < array.length - i - 1 ; j++) {
             if (array[j] > array[j+1]) { 
-                numSwaps.push([j, j+1, true])
+                swapHistory.push([j, j+1, true])
                 let tempNum = array[j]
                 array[j] = array[j+1]
                 array[j+1] = tempNum;   
             }
             else{
-                numSwaps.push([j, j+1, false]) 
+                swapHistory.push([j, j+1, false]) 
             }
         }
     }
-    return numSwaps
+    return swapHistory
 }
 
 //console.log(bubbleSort(test))
-//console.log(numSwaps)
+//console.log(swapHistory)
 
 // function getSwapNumPairs() {
-//     return numSwaps
+//     return swapHistory
 // }
 
 

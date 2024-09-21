@@ -35,6 +35,11 @@
             }
         }
 
+        .special-button{
+            background-color: rgb(63, 145, 90);
+            color: #eee;
+        }
+
         .adjustSpeed {
             margin: 0px 5px;
 
@@ -107,6 +112,10 @@
 
         .sorting-bar.swapped {
             background-color: #6c04f3
+        }
+
+        .sorting-bar.pivot {
+            background-color: rgb(17, 21, 225);
         }
         
         .sorting-bar.sorted {
