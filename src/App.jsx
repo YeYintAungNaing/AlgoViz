@@ -11,6 +11,7 @@ import ContactUs from './pages/ContactUs/ContactUs';
 import PathFindingVisualizer from './pages/Pathfinder/PathFinder';
 import Register from './pages/auth/Register';
 import Login from './pages/auth/Login';
+import ComparePerformance from './pages/ComparePerformance/ComparePerformance';
 
 
 function App() {
@@ -67,6 +68,10 @@ function App() {
           {
             path : '/AlgoViz/contact',
             element : <ContactUs></ContactUs>
+          },
+          {
+            path : '/AlgoViz/compare',
+            element : <ComparePerformance></ComparePerformance>
           },
         ]
       }

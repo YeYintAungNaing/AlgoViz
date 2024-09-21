@@ -1,7 +1,18 @@
+import { useContext } from "react";
+import { GlobalContext } from "../../context/GlobalState";
 
 function ComparePerformance() {
+
+  const {timeData, setTimeData} = useContext(GlobalContext);
+  console.log(timeData)
+
   return (
-    <div>ComparePerformance</div>
+    <div>
+      {
+        timeData.length > 0 && 
+        timeData.map((eachData) => eachData.map((ele, i) => <div key={i}>{ele}</div>))
+      }
+    </div>
   )
 }
 

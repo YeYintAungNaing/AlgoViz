@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import './SortingVisualizer.scss'
 import  {bubbleSort, bubbleSortcodeSnippet, bubbleSortSteps}  from '../../algorithms/BubbleSort.js';
 import { selectionSort, selectionSortCodeSnippet, selectionSortSteps } from '../../algorithms/Selection.js';
 import 'prismjs/themes/prism.css'; 
 import Prism from 'prismjs';
 import { insertionSort, insertionSortCodeSnippet, insertionSortSteps } from '../../algorithms/InsertionSort.js';
+import { GlobalContext } from '../../context/GlobalState.jsx';
 
 
 function SortingVisualizer() {
@@ -20,6 +21,10 @@ function SortingVisualizer() {
   const [currentAlgo, setCurrentAlgo] = useState('')
   const [explanation, setExplanation] = useState([null, null])
   const [speed, setSpeed] = useState(1000)
+  const [timeTaken, setTimeTaken]  = useState(0)
+
+  const {timeData,setTimeData} = useContext(GlobalContext);
+  
 
 
   useEffect(()=>{
@@ -37,13 +42,13 @@ function SortingVisualizer() {
   }, [isLoaded])
 
   useEffect(()=>{
-    if (currentAlgo === 'bubbleSort') {
+    if (currentAlgo === 'BubbleSort') {
       setExplanation([bubbleSortSteps, bubbleSortcodeSnippet])
     }
-    else if (currentAlgo === 'selectionSort') {
+    else if (currentAlgo === 'SelectionSort') {
       setExplanation([selectionSortSteps, selectionSortCodeSnippet])
     }
-    else if (currentAlgo === 'insertionSort') {
+    else if (currentAlgo === 'InsertionSort') {
       setExplanation([insertionSortSteps, insertionSortCodeSnippet])
     }
 
@@ -60,7 +65,14 @@ function SortingVisualizer() {
   }
 
   function handleUserInputChange(e) {
-    setUserArray(e.target.value)
+    const value = e.target.value;
+
+    if (/^[0-9,]*$/.test(value)) {
+        setUserArray(value);
+    }
+    else{
+      setMessage('Only intergers are allowed')
+    }
   }
   
   function generateArray(e) {
@@ -83,6 +95,12 @@ function SortingVisualizer() {
   function handleInsert(e) {
     e.preventDefault()
     const numberArray = userArray.split(',').map(num => Number(num));
+    for (let num of numberArray) {
+      if (num > 340) {
+        setMessage('Interger must be smaller than 340')
+        return
+      } 
+    }
     setArray(numberArray);
   }
   
@@ -114,11 +132,12 @@ function SortingVisualizer() {
         return
       }
       setIsAnimating(true)
-      setCurrentAlgo('bubbleSort')
+      setMessage(`Bubble Sort is running`)
+      setCurrentAlgo('BubbleSort')
       let copyArray = array.slice()
       let swapHistory = bubbleSort(copyArray)  
       //console.log(swapHistory)
-      animateSorting(swapHistory, copyArray)
+      animateSorting(swapHistory, copyArray, 'Bubble Sort')  // cannot use currentAlgorithm state in the same function scope after setting a new state
      
   }
   //console.log(array)
@@ -146,13 +165,14 @@ function SortingVisualizer() {
       setMessage('Animation and state updating are in process.. pls wait')
       return
     }
-
     setIsAnimating(true)
-    setCurrentAlgo('selectionSort')
+    setMessage(`Selection sort is running`)
+    setCurrentAlgo('SelectionSort')
     let copyArray = array.slice()
     let swapHistory = selectionSort(copyArray)  
-    animateSorting(swapHistory, copyArray)
+    animateSorting(swapHistory, copyArray, 'Selection sort')  
   }
+
 
   function startInsertionSort(e) {
     e.preventDefault()
@@ -160,13 +180,13 @@ function SortingVisualizer() {
       setMessage('Animation and state updating are in process.. pls wait')
       return
     }
-
     setIsAnimating(true)
-    setCurrentAlgo('insertionSort')
+    setMessage(`Insertion sort is running`)
+    setCurrentAlgo('InsertionSort')
     let copyArray = array.slice()
     let swapHistory = insertionSort(copyArray)  
     //console.log(swapHistory)
-    animateSorting(swapHistory, copyArray)
+    animateSorting(swapHistory, copyArray, 'Insertion Sort')
   }
 
 
@@ -217,7 +237,7 @@ function SortingVisualizer() {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  async function animateSorting(swapHistory, sortedArray) {
+  async function animateSorting(swapHistory, sortedArray, algo) {
     const startTime = performance.now();  // Start timer
     for (let i = 0; i < swapHistory.length; i++) {
       const [barOneIndex, barTwoIndex, isSwapped] = swapHistory[i];
@@ -254,10 +274,12 @@ function SortingVisualizer() {
       if (i === swapHistory.length - 1) {
         const endTime = performance.now();  
         const totalTime = (endTime - startTime) / 1000;  
-        setMessage(`${totalTime.toFixed(2)} seconds`);
+        setMessage(`${algo} : ${totalTime.toFixed(2)} seconds`);
         await sleep(320)
-        setArray(sortedArray);  
-        setIsAnimating(false);  
+        setArray(sortedArray);
+        setTimeTaken(totalTime.toFixed(2))  
+        setIsAnimating(false); 
+         
       }
     }
   }
@@ -267,6 +289,14 @@ function SortingVisualizer() {
     e.preventDefault()
     setArray(previousArray)
   }
+
+  function saveData(e) {
+    e.preventDefault()
+    let copyObj = ['sorting', currentAlgo, arraySize, speed, timeTaken]
+    //setTimeData([...copyObj])
+    setTimeData(prevTimeData => [...prevTimeData, copyObj]);
+  }
+  console.log(timeData)
   
   return (
     <div className="sorting-visualizer">
@@ -315,6 +345,7 @@ function SortingVisualizer() {
         <button onClick={startSelectionSort}>Selection Sort</button>
         <button onClick={startInsertionSort}>Insertion Sort</button>
         <button className='special-button' onClick={restoreArray}>Restore array</button>
+        <button onClick={saveData}>Save data</button>
       </div>
       <div className='algoInfo'><h3>{message}</h3></div>
       <div className="interface">
@@ -332,7 +363,7 @@ function SortingVisualizer() {
       </div>
       <div className="explanation">
         <div className='word-explanation'>
-          <h2>Algorithm explanation</h2>
+          <h2>{currentAlgo && currentAlgo}</h2>
             {
               explanation[0] &&
               explanation[0].map((eachStep, i) => 
