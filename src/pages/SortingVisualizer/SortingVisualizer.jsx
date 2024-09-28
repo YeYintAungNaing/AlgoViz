@@ -21,11 +21,9 @@ function SortingVisualizer() {
   const [currentAlgo, setCurrentAlgo] = useState('')
   const [explanation, setExplanation] = useState([null, null])
   const [speed, setSpeed] = useState(1000)
-  const [timeTaken, setTimeTaken]  = useState(0)
-
-  const {timeData,setTimeData} = useContext(GlobalContext);
+  const [compareInfo, setCompareInfo] = useState(null)   // comparison data will be saved insided this immediately after sorting is done
+  const {setTimeData} = useContext(GlobalContext);
   
-
 
   useEffect(()=>{
     if (!isLoaded) {
@@ -37,9 +35,12 @@ function SortingVisualizer() {
         setPreviousArray(generatedArray)
       }
       setIsLoaded(true)
-    }
-    
+    } 
   }, [isLoaded])
+  
+
+  //console.log('rendered')
+
 
   useEffect(()=>{
     if (currentAlgo === 'BubbleSort') {
@@ -51,18 +52,18 @@ function SortingVisualizer() {
     else if (currentAlgo === 'InsertionSort') {
       setExplanation([insertionSortSteps, insertionSortCodeSnippet])
     }
-
   }, [currentAlgo])
 
+  
   useEffect(() => {
     Prism.highlightAll();  // highlights the code whenever explanation[1] is changed
   }, [explanation]);
-
   //console.log('rendered')
 
   function handleCheckboxChange(e) {
     setIsChecked(e.target.checked);
   }
+
 
   function handleUserInputChange(e) {
     const value = e.target.value;
@@ -75,12 +76,9 @@ function SortingVisualizer() {
     }
   }
   
+
   function generateArray(e) {
     e.preventDefault()
-    if(isAnimating) {
-      setMessage('Animation and state updating are in process.. pls wait')
-      return
-    }
     setPreviousArray(array)
 
     let generatedArray = []
@@ -88,12 +86,13 @@ function SortingVisualizer() {
       const randomNum = Math.floor(Math.random() * 335) + 5
       generatedArray.push(randomNum)
     }
-    setArray(generatedArray)
+    setArray(generatedArray)  
   }
   //console.log(array)
 
   function handleInsert(e) {
     e.preventDefault()
+
     const numberArray = userArray.split(',').map(num => Number(num));
     for (let num of numberArray) {
       if (num > 340) {
@@ -104,12 +103,13 @@ function SortingVisualizer() {
     setArray(numberArray);
   }
   
+
   function handleSliderChange(e) {
     setArraySize(e.target.value)
   }
 
+
   function handleSpeedChange(e) {
-  
     const value = e.target.value;
     if (value === 'slow') {
       setSpeed(1000);
@@ -125,12 +125,9 @@ function SortingVisualizer() {
     }
   }
 
+
   function startBubbleSort(e) {
       e.preventDefault()
-      if(isAnimating) {
-        setMessage('Animation and state updating are in process.. pls wait')
-        return
-      }
       setIsAnimating(true)
       setMessage(`Bubble Sort is running`)
       setCurrentAlgo('BubbleSort')
@@ -161,25 +158,17 @@ function SortingVisualizer() {
 
   function startSelectionSort(e) {
     e.preventDefault()
-    if(isAnimating) {
-      setMessage('Animation and state updating are in process.. pls wait')
-      return
-    }
     setIsAnimating(true)
     setMessage(`Selection sort is running`)
     setCurrentAlgo('SelectionSort')
     let copyArray = array.slice()
     let swapHistory = selectionSort(copyArray)  
-    animateSorting(swapHistory, copyArray, 'Selection sort')  
+    animateSorting(swapHistory, copyArray, 'Selection Sort')  
   }
 
 
   function startInsertionSort(e) {
     e.preventDefault()
-    if(isAnimating) {
-      setMessage('Animation and state updating are in process.. pls wait')
-      return
-    }
     setIsAnimating(true)
     setMessage(`Insertion sort is running`)
     setCurrentAlgo('InsertionSort')
@@ -238,6 +227,7 @@ function SortingVisualizer() {
   }
 
   async function animateSorting(swapHistory, sortedArray, algo) {
+    setPreviousArray(array)
     const startTime = performance.now();  // Start timer
     for (let i = 0; i < swapHistory.length; i++) {
       const [barOneIndex, barTwoIndex, isSwapped] = swapHistory[i];
@@ -276,10 +266,9 @@ function SortingVisualizer() {
         const totalTime = (endTime - startTime) / 1000;  
         setMessage(`${algo} : ${totalTime.toFixed(2)} seconds`);
         await sleep(320)
-        setArray(sortedArray);
-        setTimeTaken(totalTime.toFixed(2))  
-        setIsAnimating(false); 
-         
+        setArray(sortedArray); 
+        setCompareInfo({ name: algo, speed: `${speed}MS`, arraySize: arraySize, timeTaken: totalTime.toFixed(2)})
+        setIsAnimating(false);  
       }
     }
   }
@@ -292,17 +281,21 @@ function SortingVisualizer() {
 
   function saveData(e) {
     e.preventDefault()
-    let copyObj = ['sorting', currentAlgo, arraySize, speed, timeTaken]
-    //setTimeData([...copyObj])
-    setTimeData(prevTimeData => [...prevTimeData, copyObj]);
+    if (!compareInfo) {
+      setMessage('There is no data to save, start an algorithm to make a new data')
+      return
+    }
+    setTimeData(prevTimeData => [...prevTimeData, compareInfo ]);
+    setMessage('Data has been saved')
   }
-  console.log(timeData)
+  //console.log(timeData)
   
   return (
     <div className="sorting-visualizer">
       <div className="setting">
       <div className="checkbox-container">
-        <input 
+        <input
+          disabled={isAnimating} 
           type="checkbox" 
           id="featureCheckbox" 
           checked={isChecked} 
@@ -314,15 +307,16 @@ function SortingVisualizer() {
       </div>
         {
         isChecked?   
-          <button onClick={handleInsert}>Insert</button>:
-          <button onClick={generateArray}>Generate</button>
+          <button disabled={isAnimating} onClick={handleInsert}>Insert</button>:
+          <button disabled={isAnimating} onClick={generateArray}>Generate</button>
         }
         <div className='array-generator'>
           {
-            isChecked? <input className='userArrayInput' value={userArray} onChange={handleUserInputChange}></input> : 
+            isChecked? <input className='userArrayInput' disabled={isAnimating} value={userArray} onChange={handleUserInputChange}></input> : 
             <div className="slider-container">
             <p>{arraySize}</p>
             <input
+              disabled={isAnimating}
               type="range"
               min="2"
               max="30"
@@ -333,19 +327,19 @@ function SortingVisualizer() {
           }
         </div>      
         <div className='adjustSpeed'>
-          <select onChange={handleSpeedChange}>
+          <select disabled={isAnimating} onChange={handleSpeedChange}>
             <option value="slow">Slow</option>
             <option value="normal">Normal</option>
             <option value="fast">Fast</option>
             <option value="superfast">Super Fast</option>
           </select>
         </div>
-        <button onClick={startBubbleSort}>Bubble Sort</button>
-        <button onClick={startQuickSort}>Quick Sort</button>
-        <button onClick={startSelectionSort}>Selection Sort</button>
-        <button onClick={startInsertionSort}>Insertion Sort</button>
-        <button className='special-button' onClick={restoreArray}>Restore array</button>
-        <button onClick={saveData}>Save data</button>
+        <button disabled={isAnimating} onClick={startBubbleSort}>Bubble Sort</button>
+        <button disabled={isAnimating} onClick={startQuickSort}>Quick Sort</button>
+        <button disabled={isAnimating} onClick={startSelectionSort}>Selection Sort</button>
+        <button disabled={isAnimating} onClick={startInsertionSort}>Insertion Sort</button>
+        <button disabled={isAnimating} className='special-button' onClick={restoreArray}>Restore array</button>
+        <button disabled={isAnimating} onClick={saveData}>Save data</button>
       </div>
       <div className='algoInfo'><h3>{message}</h3></div>
       <div className="interface">

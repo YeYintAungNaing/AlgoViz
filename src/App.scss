@@ -59,7 +59,7 @@
                 display: flex;     // text inside link 
                 justify-content: center;
                 align-items: center;
-                height: 65px;
+                height: 100%;
                 padding: 0px  5px;
 
                 &:hover {
@@ -76,7 +76,36 @@
                 border: 1px solid;  
             }
         }
+
+       
+        
     }
+    @media (max-width: 600px) {
+        .navBar{
+            height: 45px;
+
+            h1{
+                font-size: 20px;
+            }
+            
+            .navLinks {
+                gap: 10px;
+                height: 45px;
+                .link {
+                    font-size: 16px;
+                       
+                }
+        
+                .submit-button {
+                    font-size: 12px; 
+                    padding: 5px 15px; 
+                }
+            }
+
+        }
+        
+    }
+   
         
     .page-container{   // page between nav and footer ( for every page ) 
         flex-grow: 1;  // This makes the page content take up the remaining space
@@ -95,16 +124,17 @@
               max-width: 1000px;
               width: 100%;
           
-              .home-card {
-                background-color: #f9f9f9;
-                border-radius: 10px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                padding: 20px;
-                text-align: center;
-                transition: transform 0.3s ease;
+                .home-card {
+                    background-color: #f9f9f9;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    padding: 20px;
+                    text-align: center;
+                    transition: transform 0.3s ease;
+                    
           
                 &:hover {
-                  transform: translateY(-10px);
+                  transform: translateY(-5px);
                   background-color: rgb(219, 235, 227);
 
                 }
@@ -136,10 +166,24 @@
                 }
               }
             }
-          }
+        }
+        @media (max-width: 600px) {
+            .home{
+                padding: 0;
+                .home-cards {
+                    grid-template-columns: repeat(1, 1fr);
+                    max-width: 550px;
+                    .home-card {
+                        padding: 7px;
+                        img {
+                            height: 300px;
+                          }
+                    }
+                }
+            }
+        }
     }
-
-
+    
     .footer-container{
         background-color:rgb(63, 145, 90);
         display: flex;
