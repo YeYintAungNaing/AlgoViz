@@ -131,11 +131,11 @@ function DataStructureVisualizer() {
       </div>
       <div className="explanation-container">
         <div className='explanation'>
-          <h2>{currentDs && currentDs}</h2>
+          <h1>{currentDs && currentDs}</h1>
           <p>{stackExplanation[0]}</p>
           {
           stackExplanation[1].map((operation, i) => (
-            <div key={i}>{operation}</div>
+            <div className="DS-operation" key={i}>{operation}</div>
           ))
           }
         </div>

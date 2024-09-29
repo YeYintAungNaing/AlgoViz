@@ -88,7 +88,7 @@
             }
             
             .stack-element.peeked{
-                background-color: aqua;
+                background-color:  #15782e;;
             }
 
             .stack-element.dropping-diagonal {
@@ -125,5 +125,27 @@
         height: 280px; 
         margin-top: 20px;
         background-color: #bed8c5;
+
+
+        h1{
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 10px;
+          size: 25px;
+          text-transform: uppercase;
+        }
+
+        p{
+          text-indent: 40px;
+          font-size: 22px;
+          padding: 0 10px;
+          margin-bottom: 10px;
+        }
+
+        .DS-operation{
+          padding: 5px 10px;
+          font-size: 22px;
+        }
     }   
 }
