@@ -79,11 +79,68 @@
             .userArrayInput{
                 height: 30px;
             }
+        }  
+    }
 
+    @media (max-width: 1120px) {
+
+        .setting{
+
+            .array-generator{
+                margin: 0 6px;
+                width: 130px;
+
+                input{
+                    width: 120px;
+                }
+            }
+
+            button{
+                width: 65px;
+                font-size: 11px;
+                margin: 0 5px;
+            }
 
         }
+    }
 
-       
+    @media (max-width: 830px) {
+
+        .setting{
+
+            .checkbox-container{
+                font-size: 12px;
+                gap: 2px;
+            }
+
+            .array-generator{
+                margin: 0 3px;
+                width: 100px;
+
+                p{
+                    font-size: 10px;
+                }
+
+                input{
+                    width: 90px;
+                }
+            }
+
+            .adjustSpeed{
+                margin: 0px 3px;
+                select{
+                    width: 80px;
+                    font-size: 10px;
+                }
+            }
+
+            button{
+                width: 45px;
+                font-size: 8px;
+                margin: 0 2px;
+                padding: 0;
+            }
+        }
     }
 
     .algoInfo{
@@ -123,6 +180,24 @@
         }
       }
 
+      @media (max-width: 1100px) {
+        .interface{
+            .sorting-bar{
+                width: 25px;
+            }
+        }
+      }
+
+      @media (max-width: 830px) {
+        .interface{
+            gap: 2px;
+            .sorting-bar{
+                width: 19px;
+            }
+        }
+      }
+
+
       .explanation {
         display: flex;
         flex-direction: row;
@@ -134,6 +209,7 @@
             height: 100%;
             background-color: #bed8c5;
             padding: 10px 15px;
+            overflow-x: auto;
 
             h2{
                 display: flex;

@@ -149,7 +149,7 @@ function MyAlgorithm() {
             document.getElementById(i).classList.remove('sorted');
           }
         }  
-        setMessage('Array is sorted correctly. Good job. You can save your algorithm by click the save button above')
+        setMessage('Array is sorted correctly. Good job.')
         setArray(copyArray)
         setIsAnimating(false)
       } catch (err) {
