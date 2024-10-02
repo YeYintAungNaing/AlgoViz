@@ -8,31 +8,44 @@ import './ComparePerformance.scss'
 Chart.register(...registerables);
 
 function ComparePerformance() {
-  const { timeData } = useContext(GlobalContext);
+  const { timeData, setTimeData } = useContext(GlobalContext);
   const [selectedSpeed, setSelectedSpeed] = useState('300MS');
   // when the user selects the speed to filter the graph
   // selectedSpeed state is changed, causing the re-render
   // after that, all variables associated with the selectedSpeed will also be re-assigned based on that new selectedSpeed
+  // const filteredData = timeData.filter(d => d.speed === selectedSpeed);
+  // const sortedData = [...filteredData].sort((a, b) => a.arraySize - b.arraySize);
+  // const sortedLabels = Array.from(new Set(sortedData.map(d => d.arraySize)));
+
   const filteredData = timeData.filter(d => d.speed === selectedSpeed);
   const sortedData = [...filteredData].sort((a, b) => a.arraySize - b.arraySize);
-  const sortedLabels = Array.from(new Set(sortedData.map(d => d.arraySize)));
-
- 
+  const sortedLabels = Array.from(new Set(sortedData.map(d => d.arraySize))).sort((a, b) => a - b);
+  
+  
   const chartData = {
-    labels: sortedLabels, // Use the sorted labels
+    labels: sortedLabels,  // Use the sorted array sizes as labels
     datasets: [
       ...['Bubble Sort', 'Selection Sort', 'Insertion Sort'].map(algo => ({
         label: algo,
         data: sortedLabels.map(size => {
+          // Find the entry for this algorithm and array size
           const entry = sortedData.find(d => d.name === algo && d.arraySize === size);
-          return entry ? entry.timeTaken : null; // Fill with time or null if no data for that size
+          // Return timeTaken or null to ensure a gap is inserted if no data exists
+          return entry ? parseFloat(entry.timeTaken) : null;
         }),
         fill: false,
-        borderColor: getColor(algo), // Custom function for different colors
+        borderColor: getColor(algo),  // Custom function for different colors
         tension: 0.4,
+        spanGaps: true,  // This allows lines to connect across null values
       })),
     ],
   };
+
+  function deleteData(e, index) {
+    e.preventDefault()
+    let copyTimeData = timeData.filter((eachData)=> timeData.indexOf(eachData) !== index )
+    setTimeData(copyTimeData)
+  }
 
   return (
     <div className='compare-perf'>
@@ -47,58 +60,80 @@ function ComparePerformance() {
           <option value="600MS">600MS</option>
           <option value="1000MS">1000MS</option>
         </select>
-     
       </div>
       </div> 
       <div className="chart-container">
-        <Line
-          data={chartData}
-          options={{
-            responsive: true,
-            maintainAspectRatio: false, // To allow flexible height
-            scales: {
-              x: {
-                title: {
-                  display: true,
-                  text: 'Array Size',
-                },
-                type: 'category',
-              },
-              y: {
-                title: {
-                  display: true,
-                  text: 'Time Taken (s)',
-                },
-              },
-            },
-            plugins: {
-              legend: {
-                position: 'top',
-              },
-              tooltip: {
-                callbacks: {
-                  label: (context) => `${context.dataset.label}: ${context.raw.y} s`,
-                },
-              },
-            },
-          }}
-        />
-      </div>
+  <Line
+    data={chartData}
+    options={{
+      responsive: true,
+      maintainAspectRatio: false, // To allow flexible height
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'Array Size',
+          },
+          type: 'linear',  // Changed to linear to handle numerical x-axis properly
+          beginAtZero: true,  // Optional: Start the x-axis from zero if needed
+          ticks: {
+            stepSize: 1,  // Ensures increments of 1 if necessary
+          },
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'Time Taken (s)',
+          },
+        },
+      },
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        tooltip: {
+          callbacks: {
+            label: (context) => `${context.dataset.label}: ${context.raw.y} s`,
+          },
+        },
+      },
+    }}
+  />
+</div>
+      
+    {timeData && timeData.length > 0 && (
       <div className='manage-time-data'>
-        {
-          timeData  && timeData.length > 0? 
-          timeData.map((eachData, index) => (
-            <div key={index}>
-              <div>{eachData.name} || array size : {eachData.arraySize} || Time taken : {eachData.timeTaken}s || Delay : {eachData.speed}</div>
-              <button>Delete</button>
-            </div>
-          ))
-          :
-          <div>There is no data to show</div>
-        }
+      <table>
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Algorithm Name</th>
+            <th>Array Size</th>
+            <th>Time Taken (s)</th>
+            <th>Delay</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {timeData.map((eachData, index) => (
+            <tr key={index}>
+              <td>{index + 1}</td>
+              <td>{eachData.name}</td>
+              <td>{eachData.arraySize}</td>
+              <td>{eachData.timeTaken}</td>
+              <td>{eachData.speed}</td>
+              <td>
+                <button onClick={(e)=>deleteData(e, index)}>Delete</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
       </div>
-    </div>
-  );
+    )}
+</div>
+    
+  )
 }
 
 const getColor = (algoName) => {
