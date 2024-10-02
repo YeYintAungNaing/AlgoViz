@@ -35,17 +35,21 @@ function ComparePerformance() {
   };
 
   return (
-    <div>
+    <div className='compare-perf'>
+      <div className='setting'>
       <h2>Compare Performance</h2>
-      <label>
-        Speed:
+      <div className='speed-filter'>
+      
+        Filter with delay:
         <select value={selectedSpeed} onChange={(e) => setSelectedSpeed(e.target.value)}>
           <option value="50MS">50MS</option>
           <option value="300MS">300MS</option>
           <option value="600MS">600MS</option>
           <option value="1000MS">1000MS</option>
         </select>
-      </label>
+     
+      </div>
+      </div> 
       <div className="chart-container">
         <Line
           data={chartData}

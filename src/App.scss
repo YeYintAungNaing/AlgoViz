@@ -83,14 +83,14 @@
     @media (max-width: 600px) {
         .navBar{
             height: 45px;
-            padding: 0px  10px;
+            padding: 0px  5px;
 
             h1{
-                font-size: 20px;
+                font-size: 17px;
             }
             
             .navLinks {
-                gap: 10px;
+                gap: 2px;
                 height: 45px;
                 .link {
                     font-size: 16px;
@@ -99,7 +99,7 @@
         
                 .submit-button {
                     font-size: 12px; 
-                    padding: 5px 10px; 
+                    padding: 5px 5px; 
                 }
             }
 

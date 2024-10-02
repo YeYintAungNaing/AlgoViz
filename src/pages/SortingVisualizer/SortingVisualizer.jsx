@@ -76,7 +76,6 @@ function SortingVisualizer() {
     }
   }
   
-
   function generateArray(e) {
     e.preventDefault()
     setPreviousArray(array)
