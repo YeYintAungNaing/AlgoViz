@@ -1,5 +1,4 @@
-
-// let test = [12,3,66]
+// let test = [12,3,66, 34,22]
 
 export function bubbleSort(array) {
     let swapHistory = []
@@ -19,8 +18,8 @@ export function bubbleSort(array) {
     return swapHistory
 }
 
-//console.log(bubbleSort(test))
-//console.log(swapHistory)
+// console.log(bubbleSort(test))
+
 
 // function getSwapNumPairs() {
 //     return swapHistory

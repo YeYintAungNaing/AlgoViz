@@ -11,6 +11,9 @@ function DataStructureVisualizer() {
   const [poppedElement, setPoppedElement] = useState(null);
   //const [explanation, setExplanation] = useState(null)
   const MAX_STACK_SIZE = 8;
+  const BLOCK_WIDTH = 50;
+
+const MAX_QUEUE_SIZE = 8;
 
 
   const stackExplanation = [
@@ -38,10 +41,14 @@ function DataStructureVisualizer() {
     const value = e.target.value;
     if (value === 'stack') {
       setCurrentDs('stack')
+      
     } 
-    else if (value === 'queuel') {
+    else if (value === 'queue') {
       setCurrentDs('queue')
+     
     }
+    setNumbers([12, 14, 44, 23])
+    setMessage('')
   }
 
   function sleep(ms) {
@@ -50,7 +57,7 @@ function DataStructureVisualizer() {
 
   // console.log('re')
 
-  async function handlePeek(e) {
+  async function handleStackPeek(e) {
     e.preventDefault()
     setIsAnimating(true)
     const lastIndex = numbers.length - 1
@@ -94,6 +101,54 @@ function DataStructureVisualizer() {
     setIsAnimating(false)
   }
 
+  async function handleQueuePeek(e) {
+    e.preventDefault()
+    setIsAnimating(true)
+    if(numbers.length > 0) {
+      document.getElementById(0).className = 'queue-block peeked'
+      await sleep(1000)
+      document.getElementById(0).className = 'queue-block'
+      setIsAnimating(false)
+    }
+    else{
+      setMessage("Queue underflow: No elements to peek")
+    }
+    setIsAnimating(false)
+  }
+
+  async function handleEnqueue(e, newValue) {
+    e.preventDefault();
+    if (numbers.length < MAX_QUEUE_SIZE) {
+      setIsAnimating(true);
+      const targetIndex = numbers.length;  
+      setTempElement({ value: newValue, targetIndex });
+      await sleep(610);
+      setNumbers([...numbers, newValue]);
+      setMessage(`${newValue} has been inserted into the queue`);
+      setTempElement(null);
+      setIsAnimating(false);
+    } else {
+      setMessage('Queue overflow: Maximum queue size reached');
+    }
+  }
+  
+  
+  async function handleDequeue(e) {
+    e.preventDefault();
+    if (numbers.length > 0) {
+      setIsAnimating(true);
+      const dequeuedValue = numbers[0];  
+      setPoppedElement(dequeuedValue);   
+      await sleep(600);
+      setNumbers(numbers.slice(1));
+      setMessage(`${dequeuedValue} has been dequeued from the queue`);
+      setPoppedElement(null);  
+      setIsAnimating(false);
+    } else {
+      setMessage('Queue underflow: No elements to dequeue');
+    }
+  }
+  
 
   return (
     <div className="DS-visualizer">
@@ -105,30 +160,80 @@ function DataStructureVisualizer() {
           </select>
         </div>
         <button disabled={isAnimating} onClick={generateNumbers}>Generate</button>
-        <button disabled={isAnimating} onClick={handlePeek}>Peek</button>
-        <button disabled={isAnimating} onClick={(e) => handlePush(e, prompt("Enter a value to push"))}>Push</button>
-        <button disabled={isAnimating} onClick={handlePop}>Pop</button>
+        {currentDs === 'stack' ? (
+          <div>
+            <button disabled={isAnimating} onClick={handleStackPeek}>Peek</button>
+            <button disabled={isAnimating} onClick={(e) => handlePush(e, prompt("Enter a value to push"))}>Push</button>
+            <button disabled={isAnimating} onClick={handlePop}>Pop</button>
+          </div>
+        ) 
+        : (
+          <div>
+            <button disabled={isAnimating} onClick={handleQueuePeek}>Peek</button>
+            <button disabled={isAnimating} onClick={(e) => handleEnqueue(e, prompt("Enter a value to push"))}>Enqueue</button>
+            <button disabled={isAnimating} onClick={handleDequeue}>Dequeue</button>
+          </div>
+        )}
       </div>
       <div className='algoInfo'><h3>{message}</h3></div>
-      <div className="interface">
-      <div className="stack-container">
-        {numbers.map((element, index) => (
-          <div key={index} id={index} className="stack-element">
-            {element}
+      {
+        currentDs === 'stack' && (
+          <div className="stack-interface">
+          <div className="stack-container">
+            {numbers.map((element, index) => (
+              <div key={index} id={index} className="stack-element">
+                {element}
+              </div>
+            ))}
+            {tempElement && (   
+              <div className="stack-element dropping-diagonal">
+                {tempElement}
+              </div>
+            )}
+            {poppedElement && (
+              <div className="stack-element popping-diagonal">
+                {poppedElement}
+              </div>
+            )}
+          </div>  
           </div>
-        ))}
-         {tempElement && (   
-          <div className="stack-element dropping-diagonal">
-            {tempElement}
+        )
+      }
+      {
+        currentDs === "queue" && (
+          <div className="queue-interface">
+          <div className="queue-container">
+          {Array(MAX_QUEUE_SIZE).fill(null).map((_, index) => (
+            <div key={index} id={index} className="queue-block">
+              {numbers[index] !== undefined ? numbers[index] : ''}
+            </div>
+          ))}
+          {tempElement && (
+            <div
+              className="queue-block enqueue-animation"
+              style={{
+                top: '-70px', //  (70px between container ground and the  lower part of that block)
+                left: `${tempElement.targetIndex * (BLOCK_WIDTH)}px`, 
+              }}
+            >
+              {tempElement.value}
+            </div>
+          )}
+          {poppedElement && (
+            <div
+              className="queue-block dequeue-animation"
+              style={{
+                top: '0px',  
+                left: '0px', 
+              }}
+            >
+              {poppedElement}
+            </div>
+          )}
           </div>
-        )}
-         {poppedElement && (
-          <div className="stack-element popping-diagonal">
-            {poppedElement}
           </div>
-        )}
-      </div>  
-      </div>
+        ) 
+      }
       <div className="explanation-container">
         <div className='explanation'>
           <h1>{currentDs && currentDs}</h1>

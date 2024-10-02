@@ -10,6 +10,7 @@ function NavBar() {
       <div className="navLinks">
         <Link className='link' to='/AlgoViz'>Home</Link>
         <Link className='link' to='/AlgoViz/compare'>Compare</Link>
+        <Link className='link' to='/AlgoViz/discussion'>Discussion</Link>
         <Link className="link" to='/AlgoViz/register'>
           <button className="submit-button">Login</button>
         </Link>

@@ -10,8 +10,6 @@ Chart.register(...registerables);
 function ComparePerformance() {
   const { timeData } = useContext(GlobalContext);
   const [selectedSpeed, setSelectedSpeed] = useState('300MS');
-
-
   // when the user selects the speed to filter the graph
   // selectedSpeed state is changed, causing the re-render
   // after that, all variables associated with the selectedSpeed will also be re-assigned based on that new selectedSpeed
@@ -49,39 +47,52 @@ function ComparePerformance() {
         </select>
       </label>
       <div className="chart-container">
-  <Line
-    data={chartData}
-    options={{
-      responsive: true,
-      maintainAspectRatio: false, // To allow flexible height
-      scales: {
-        x: {
-          title: {
-            display: true,
-            text: 'Array Size',
-          },
-          type: 'category',
-        },
-        y: {
-          title: {
-            display: true,
-            text: 'Time Taken (s)',
-          },
-        },
-      },
-      plugins: {
-        legend: {
-          position: 'top',
-        },
-        tooltip: {
-          callbacks: {
-            label: (context) => `${context.dataset.label}: ${context.raw.y} s`,
-          },
-        },
-      },
-    }}
-  />
-</div>
+        <Line
+          data={chartData}
+          options={{
+            responsive: true,
+            maintainAspectRatio: false, // To allow flexible height
+            scales: {
+              x: {
+                title: {
+                  display: true,
+                  text: 'Array Size',
+                },
+                type: 'category',
+              },
+              y: {
+                title: {
+                  display: true,
+                  text: 'Time Taken (s)',
+                },
+              },
+            },
+            plugins: {
+              legend: {
+                position: 'top',
+              },
+              tooltip: {
+                callbacks: {
+                  label: (context) => `${context.dataset.label}: ${context.raw.y} s`,
+                },
+              },
+            },
+          }}
+        />
+      </div>
+      <div className='manage-time-data'>
+        {
+          timeData  && timeData.length > 0? 
+          timeData.map((eachData, index) => (
+            <div key={index}>
+              <div>{eachData.name} || array size : {eachData.arraySize} || Time taken : {eachData.timeTaken}s || Delay : {eachData.speed}</div>
+              <button>Delete</button>
+            </div>
+          ))
+          :
+          <div>There is no data to show</div>
+        }
+      </div>
     </div>
   );
 }

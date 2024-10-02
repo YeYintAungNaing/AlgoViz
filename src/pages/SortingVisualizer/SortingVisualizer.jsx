@@ -17,7 +17,7 @@ function SortingVisualizer() {
   const [isAnimating, setIsAnimating] = useState(false)
   const [isChecked, setIsChecked] = useState(false);
   const [userArray, setUserArray] = useState([])
-  const [message, setMessage] = useState('This is the message container')
+  const [message, setMessage] = useState('Select your desired algorithm and visualize it')
   const [currentAlgo, setCurrentAlgo] = useState('')
   const [explanation, setExplanation] = useState([null, null])
   const [speed, setSpeed] = useState(1000)
@@ -92,7 +92,10 @@ function SortingVisualizer() {
 
   function handleInsert(e) {
     e.preventDefault()
-
+    // if (userArray.length < 0) {
+    //   setMessage('There is nothing to insert')
+    //   return
+    // }
     const numberArray = userArray.split(',').map(num => Number(num));
     for (let num of numberArray) {
       if (num > 340) {

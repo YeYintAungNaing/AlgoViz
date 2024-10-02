@@ -12,6 +12,7 @@ import PathFindingVisualizer from './pages/Pathfinder/PathFinder';
 import Register from './pages/auth/Register';
 import Login from './pages/auth/Login';
 import ComparePerformance from './pages/ComparePerformance/ComparePerformance';
+import Discussion from './components/Discussion/Discussion';
 
 
 function App() {
@@ -64,8 +65,8 @@ function App() {
             element : <MyAlgorithm></MyAlgorithm>
           },
           {
-            path : '/AlgoViz/documentation',
-            element : <Documentation></Documentation>
+            path : '/AlgoViz/discussion',
+            element : <Discussion></Discussion>
           },
           {
             path : '/AlgoViz/contact',

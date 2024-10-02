@@ -59,17 +59,15 @@
         justify-content: center;
     }
 
-    .interface {
+    .stack-interface {
         height: 350px;
         display: flex;
         align-items: flex-end;
-        gap: 5px;
         justify-content: center;
 
         .stack-container {
             width: 300px;
-            height: 310px;
-            
+            height: 310px; 
             display: flex;
             flex-direction: column-reverse;
             align-items: center;
@@ -88,7 +86,7 @@
             }
             
             .stack-element.peeked{
-                background-color:  #15782e;;
+                background-color:  #15782e;
             }
 
             .stack-element.dropping-diagonal {
@@ -117,7 +115,85 @@
                   transform: translate(-50px, -50px); /* End off-screen to top-left */
                 }
               }
+        }
+    }
+
+
+    .queue-interface {
+      height: 350px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .queue-container {
+        display: flex;
+        
+        width: calc((50px) * 8); /* BLOCK_WIDTH * queue size */
+        position: relative;
+        margin-bottom: 20px;
+
+        .queue-block {
+          width: 50px;
+          height: 50px;
+          background-color: #bed8c5;
+          border: 0.2px solid #000;
+          
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .queue-block.peeked{
+          background-color: #15782e;
+        }
+
+        .queue-block.enqueue-animation {
+          position: absolute;
+          width: 50px;
+          height: 50px;
+          background-color: #bed8c5;
+          border: 1px solid black;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 10;
+          animation: drop-into-queue 0.6s ease-in-out forwards;
+          transition: left 0.6s ease-in-out;
+        }
+        
+        
+        @keyframes drop-into-queue {
+          from {
+            transform: translateY(0); 
           }
+          to {
+            transform: translateY(70px); /* Move down into position */
+          }
+        }
+
+        .queue-block.dequeue-animation {
+          position: absolute;
+          width: 50px;
+          height: 50px;
+          background-color: #bed8c5;
+          border: 1px solid black;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 10;
+          animation: dequeue-move 0.6s ease-in-out forwards;
+        }
+        
+        
+        @keyframes dequeue-move {
+          from {
+            transform: translateY(0); 
+          }
+          to {
+            transform: translateY(-60px); /* Move upwards */
+          }
+        }
+      }  
     }
     
         
