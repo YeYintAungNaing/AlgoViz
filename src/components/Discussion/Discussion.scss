@@ -1,0 +1,19 @@
+.discussion-container{
+
+    .comment{
+        
+        border: solid 1px black;
+
+        .comment-actions{
+            display: flex;
+            align-items: center;
+            justify-content: left;
+            gap: 5px;
+            img{
+                height: 20px;
+            }
+        }
+
+    }
+    
+}

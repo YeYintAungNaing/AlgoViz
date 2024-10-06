@@ -1,16 +1,43 @@
-import { Link } from "react-router-dom";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 
 export default function Login() {
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const auth = getAuth();
+  const navigate = useNavigate();
+
+  const handleSignIn = async () => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      navigate('/AlgoViz')
+    } catch (error) {
+      console.error("Error signing in: ", error);
+    }
+  };
+
   return (
     <div className="login-page">
     <div className="auth-container">
     <div className="login-form-container">
       <div className="login-form">
         <h1>Login</h1>
-        <input placeholder="Name"></input> 
-        <input placeholder="Password"></input>
-        <Link className="link" to='/AlgoViz'><button className="submit-button">Login</button></Link>
+        <input
+        type="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Email"
+      />
+      <input
+        type="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Password"
+      />
+        <button onClick={handleSignIn} className="submit-button">Login</button>
         <Link className="link" to='/AlgoViz'><button className="gmail-button">Sign in with gmail account</button></Link>
       </div>
       <div className="login-info">
