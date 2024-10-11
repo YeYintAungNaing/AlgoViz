@@ -160,6 +160,9 @@
         .sorting-bar {
             background-color: #304962;
             width: 40px;
+            display: flex;
+            color: #eee;
+            justify-content: center;
             transition: height 0.3s ease;
         }
 

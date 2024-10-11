@@ -1,10 +1,7 @@
 import { useContext, useEffect,  useState } from 'react'
 import {  db } from '../../firebase/firebase-config'
-import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, where } from 'firebase/firestore'
+import { collection, addDoc, query, orderBy, deleteDoc,updateDoc,increment,doc, onSnapshot, serverTimestamp, where } from 'firebase/firestore'
 import './Discussion.scss'
-
-
-import { Link } from 'react-router-dom'
 import { formatDistanceToNow } from "date-fns";
 import Report from "../../imgs/Report.png"
 import Upvote from "../../imgs/Upvote.png"
@@ -25,20 +22,21 @@ export default function Discussion() {
     
     // Query to order comments by timeStamp and filter out replies (parentCommentId = null)
     const q = query(commentsCollectionRef, where("parentCommentId", "==", null), orderBy("timeStamp", "asc"));
-  
+
     // Listen to Firestore collection in real-time
     const unsubscribe = onSnapshot(q, (snapshot) => {
+      
       const commentsData = snapshot.docs.map((doc) => {
         const comment = { id: doc.id, ...doc.data() };
         
-        // Create a real-time listener for replies
+        // making query to fetch replies that are matched with the current parentId
         const repliesQuery = query(
           collection(db, "comments"),
           where("parentCommentId", "==", comment.id),
           orderBy("timeStamp", "asc")
         );
   
-        // Listen to replies in real-time
+        // Listen to replies in real-time    
         const unsubscribeReplies = onSnapshot(repliesQuery, (replySnapshot) => {
           const replies = replySnapshot.docs.map(replyDoc => ({
             id: replyDoc.id,
@@ -53,7 +51,7 @@ export default function Discussion() {
   
         return { ...comment, unsubscribeReplies };
       });
-      console.log('read')
+      //console.log('read')
       setComments(commentsData);
     });
   
@@ -112,6 +110,51 @@ export default function Discussion() {
     }
   }
 
+
+  async function handleLike(commentId, currentLikes) {
+    if (!currentUser) {
+      alert("You must log in first.");
+      return;
+    }
+    const commentRef = doc(db, "comments", commentId);
+    try {
+      await updateDoc(commentRef, { likes: currentLikes + 1 });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function handleReport(commentId) {
+    if (!currentUser) {
+      alert("You must log in first.");
+      return;
+    }
+    const commentRef = doc(db, "comments", commentId);
+    try {
+      await updateDoc(commentRef, { reports: increment(1) });
+      alert("Comment reported.");
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function handleDeleteComment(commentId) {
+    if (!currentUser) {
+      alert("You must log in first.");
+      return;
+    }
+
+    const commentRef = doc(db, "comments", commentId);
+    try {
+      await deleteDoc(commentRef);
+      console.log("Comment deleted successfully.");
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  //console.log(comments)
+
   //console.log(currentUser)
   return (
     <div className='discussion-container'>
@@ -124,14 +167,10 @@ export default function Discussion() {
       <button onClick={handleAddComment} disabled={!content}>
         Comment
       </button>
-      <Link to='/'>
-        <button>Register</button>
-      </Link>
-
       <h2>Comments</h2>
       <div>
         {comments.map((comment) => (
-          <div className='comment' key={comment.id} style={{ marginBottom: '20px' }}>
+          <div className='comment' key={comment.id}>
             <p>
               <strong>{comment.userName}</strong> •{' '}
               {comment.timeStamp
@@ -140,10 +179,13 @@ export default function Discussion() {
             </p>
             <p>{comment.content}</p>
             <div className='comment-actions'>
-              <img src={Upvote} alt='' />
+              <img onClick={()=> handleLike(comment.id, comment.likes)} src={Upvote} alt='' />
               <p>{comment.likes}</p>
               <button onClick={() => setReplyingTo(comment.id)}>Reply</button>
-              <img src={Report} alt='' />
+              <img onClick={()=> handleReport(comment.id)} src={Report} alt=''/>
+              {currentUser && currentUser.uid === comment.userId && (
+                <button onClick={() => handleDeleteComment(comment.id)}>Delete</button>
+              )}
             </div>
 
             {/* Render reply input for this comment */}
@@ -173,10 +215,13 @@ export default function Discussion() {
                     </p>
                     <p>{reply.content}</p>
                     <div className='comment-actions'>
-                      <img src={Upvote} alt='' />
+                      <img onClick={()=> handleLike(reply.id, reply.likes)} src={Upvote} alt='' />
                       <p>{reply.likes}</p>
                       <button onClick={() => setReplyingTo(reply.id)}>Reply</button>
-                      <img src={Report} alt='' />
+                      <img onClick={()=> handleReport(reply.id)} src={Report} alt=''/>
+                      {currentUser && currentUser.uid === reply.userId && (
+                        <button onClick={() => handleDeleteComment(reply.id)}>Delete</button>
+                      )}
                     </div>
 
                     {/* Render reply input for this reply */}

@@ -15,7 +15,8 @@ export default function Login() {
       await signInWithEmailAndPassword(auth, email, password);
       navigate('/AlgoViz')
     } catch (error) {
-      console.error("Error signing in: ", error);
+      //console.error("Error signing in: ", error);
+      window.alert("Incorrect info")
     }
   };
 

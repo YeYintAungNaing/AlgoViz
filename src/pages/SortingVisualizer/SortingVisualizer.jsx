@@ -353,9 +353,13 @@ function SortingVisualizer() {
               id={index}
               className="sorting-bar"
               style={{ height: `${num}px` }}
-            />
-            ))
-          }
+            >
+               {
+                !isAnimating && num
+               }
+            </div>
+          ))
+        }
       </div>
       <div className="explanation">
         <div className='word-explanation'>
