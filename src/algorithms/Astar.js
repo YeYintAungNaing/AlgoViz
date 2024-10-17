@@ -1,3 +1,6 @@
+// Code snippet adapted from (Rohith S P,https://github.com/rohithaug) with a few changes
+// URL: https://github.com/rohithaug/pathfinding-visualizer/tree/master/src/pathfindingAlgorithms
+
 export function astar(grid, startPoint, endPoint) {
     let sortedVisitedPoints = []
     startPoint.distance = 0

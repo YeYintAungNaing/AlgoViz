@@ -179,7 +179,7 @@ function PathFindingVisualizer() {
 
   function startDijkstra(e) {
     e.preventDefault()
-    //toggleUpdating(() => {   // this is messin up with the animation timing dunno how to fix it 
+    //toggleUpdating(() => {   // this is messin up with the animation timing
 
     if (isAnimating) {
       console.log('no')

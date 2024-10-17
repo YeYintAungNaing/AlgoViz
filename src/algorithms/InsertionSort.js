@@ -9,7 +9,7 @@ export function insertionSort(array) {
             array[j + 1] = array[j]; 
             j = j - 1;
         }
-        swapHistory.push([j + 1, i, false]); // Comparing without a swap (final position)
+        swapHistory.push([j + 1, i, false]); // Comparing without a swap 
         array[j + 1] = key;
     }
     return swapHistory;
@@ -20,12 +20,10 @@ export const insertionSortCodeSnippet = `
 for (let i = 1; i < array.length; i++) {
     let key = array[i];
     let j = i - 1;
-    while (j >= 0 && array[j] > key) {
-        swapHistory.push([j, j + 1, true]); // Comparing and swapping elements
+    while (j >= 0 && array[j] > key) { 
         array[j + 1] = array[j]; 
         j = j - 1;
-    }
-    swapHistory.push([j + 1, i, false]); // Comparing without a swap (final position)
+    } 
     array[j + 1] = key;
 }`
 

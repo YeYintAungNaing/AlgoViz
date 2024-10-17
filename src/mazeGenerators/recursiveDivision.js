@@ -1,3 +1,6 @@
+// Code snippet adapted from (Rohith S P,https://github.com/rohithaug) with a few changes
+// URL: https://github.com/rohithaug/pathfinding-visualizer/tree/master/src/pathfindingAlgorithms
+
 let walls;
 
 export function recursiveDivision(grid, startPoint, endPoint) {

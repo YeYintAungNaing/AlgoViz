@@ -1,3 +1,6 @@
+// Code snippet adapted from (author [clementmihailescu], gitHub repo) with a few changes
+// URL: https://github.com/clementmihailescu/Pathfinding-Visualizer/tree/master/public/browser/pathfindingAlgorithms
+
 export function dijkstra(grid, startPoint, endPoint) {
     const sortedVisitedPoints = []
     startPoint.distance = 0;

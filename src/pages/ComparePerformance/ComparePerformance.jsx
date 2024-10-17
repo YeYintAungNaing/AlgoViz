@@ -4,23 +4,22 @@ import { Chart, registerables } from 'chart.js';
 import { GlobalContext } from '../../context/GlobalState';
 import './ComparePerformance.scss'
 
-
-Chart.register(...registerables);
-
-function ComparePerformance() {
-  const { timeData, setTimeData } = useContext(GlobalContext);
-  const [selectedSpeed, setSelectedSpeed] = useState('300MS');
-  // when the user selects the speed to filter the graph
+// when the user selects the speed to filter the graph
   // selectedSpeed state is changed, causing the re-render
   // after that, all variables associated with the selectedSpeed will also be re-assigned based on that new selectedSpeed
   // const filteredData = timeData.filter(d => d.speed === selectedSpeed);
   // const sortedData = [...filteredData].sort((a, b) => a.arraySize - b.arraySize);
   // const sortedLabels = Array.from(new Set(sortedData.map(d => d.arraySize)));
 
+Chart.register(...registerables);
+
+function ComparePerformance() {
+  const { timeData, setTimeData } = useContext(GlobalContext);
+  const [selectedSpeed, setSelectedSpeed] = useState('300MS');
+  
   const filteredData = timeData.filter(d => d.speed === selectedSpeed);
   const sortedData = [...filteredData].sort((a, b) => a.arraySize - b.arraySize);
   const sortedLabels = Array.from(new Set(sortedData.map(d => d.arraySize))).sort((a, b) => a - b);
-  
   
   const chartData = {
     labels: sortedLabels,  // Use the sorted array sizes as labels
@@ -63,43 +62,43 @@ function ComparePerformance() {
       </div>
       </div> 
       <div className="chart-container">
-  <Line
-    data={chartData}
-    options={{
-      responsive: true,
-      maintainAspectRatio: false, // To allow flexible height
-      scales: {
-        x: {
-          title: {
-            display: true,
-            text: 'Array Size',
+      <Line
+        data={chartData}
+        options={{
+          responsive: true,
+          maintainAspectRatio: false, // To allow flexible height
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: 'Array Size',
+              },
+              type: 'linear',  // Changed to linear to handle numerical x-axis properly
+              beginAtZero: true,  // Start the x-axis from zero if needed
+              ticks: {
+                stepSize: 1,  // Ensures increments of 1 if necessary
+              },
+            },
+            y: {
+              title: {
+                display: true,
+                text: 'Time Taken (s)',
+              },
+            },
           },
-          type: 'linear',  // Changed to linear to handle numerical x-axis properly
-          beginAtZero: true,  // Optional: Start the x-axis from zero if needed
-          ticks: {
-            stepSize: 1,  // Ensures increments of 1 if necessary
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            tooltip: {
+              callbacks: {
+                label: (context) => `${context.dataset.label}: ${context.raw.y} s`,
+              },
+            },
           },
-        },
-        y: {
-          title: {
-            display: true,
-            text: 'Time Taken (s)',
-          },
-        },
-      },
-      plugins: {
-        legend: {
-          position: 'top',
-        },
-        tooltip: {
-          callbacks: {
-            label: (context) => `${context.dataset.label}: ${context.raw.y} s`,
-          },
-        },
-      },
-    }}
-  />
-</div>
+        }}
+      />
+      </div>
       
     {timeData && timeData.length > 0 && (
       <div className='manage-time-data'>

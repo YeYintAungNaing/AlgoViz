@@ -24,7 +24,7 @@ const RotateScreen = ({ children }) => {
   if (isMobileDevice() && isPortrait) {
     return (
       <div className="rotate-screen">
-        <p>Please rotate your device for a better experience.</p>
+        <p>Please rotate your device to use the visualizer</p>
       </div>
     );
   }
