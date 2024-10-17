@@ -141,9 +141,9 @@ function SortingVisualizer() {
   }
   //console.log(array)
 
-  function startQuickSort(e) {
-    e.preventDefault()
-    window.alert('have not implemented yet!')
+  //function startQuickSort(e) {
+    //e.preventDefault()
+    //window.alert('have not implemented yet!')
     // if(isAnimating) {
     //   setMessage('Animation and state updating are in process.. pls wait')
     //   return
@@ -156,7 +156,7 @@ function SortingVisualizer() {
     // animateQuickSort(swapHistory, copyArray)
     // // console.log(copyArray)
     // console.log(swapHistory)
-  }
+  //}
 
   function startSelectionSort(e) {
     e.preventDefault()
@@ -337,7 +337,6 @@ function SortingVisualizer() {
           </select>
         </div>
         <button disabled={isAnimating} onClick={startBubbleSort}>Bubble Sort</button>
-        <button disabled={isAnimating} onClick={startQuickSort}>Quick Sort</button>
         <button disabled={isAnimating} onClick={startSelectionSort}>Selection Sort</button>
         <button disabled={isAnimating} onClick={startInsertionSort}>Insertion Sort</button>
         <button disabled={isAnimating} className='special-button' onClick={restoreArray}>Restore array</button>

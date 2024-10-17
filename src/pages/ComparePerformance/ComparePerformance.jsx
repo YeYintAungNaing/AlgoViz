@@ -104,7 +104,7 @@ function ComparePerformance() {
     {timeData && timeData.length > 0 && (
       <div className='manage-time-data'>
       <table>
-        <thead>
+        <thead>        
           <tr>
             <th>No</th>
             <th>Algorithm Name</th>

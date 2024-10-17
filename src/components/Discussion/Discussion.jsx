@@ -184,7 +184,7 @@ export default function Discussion() {
               <button onClick={() => setReplyingTo(comment.id)}>Reply</button>
               <img onClick={()=> handleReport(comment.id)} src={Report} alt=''/>
               {currentUser && currentUser.uid === comment.userId && (
-                <button onClick={() => handleDeleteComment(comment.id)}>Delete</button>
+                <button className='delete-button' onClick={() => handleDeleteComment(comment.id)}>Delete</button>
               )}
             </div>
 
@@ -220,7 +220,7 @@ export default function Discussion() {
                       <button onClick={() => setReplyingTo(reply.id)}>Reply</button>
                       <img onClick={()=> handleReport(reply.id)} src={Report} alt=''/>
                       {currentUser && currentUser.uid === reply.userId && (
-                        <button onClick={() => handleDeleteComment(reply.id)}>Delete</button>
+                        <button className='delete-button' onClick={() => handleDeleteComment(reply.id)}>Delete</button>
                       )}
                     </div>
 

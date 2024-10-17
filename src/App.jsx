@@ -6,13 +6,13 @@ import Home from './pages/Home';
 import SortingVisualizer from './pages/SortingVisualizer/SortingVisualizer';
 import DataStructureVisualizer from './pages/DataStructure/DataStructureVisualizer';
 import MyAlgorithm from './pages/MyAlgorithm/MyAlgorithm';
-import Documentation from './pages/Documenttation/Documentation';
 import ContactUs from './pages/ContactUs/ContactUs';
 import PathFindingVisualizer from './pages/Pathfinder/PathFinder';
 import Register from './pages/auth/Register';
 import Login from './pages/auth/Login';
 import ComparePerformance from './pages/ComparePerformance/ComparePerformance';
 import Discussion from './components/Discussion/Discussion';
+import RotateScreen from './components/RotateScreen/RotateScreen'
 
 
 function App() {
@@ -34,7 +34,7 @@ function App() {
     const router = createBrowserRouter([
       {
         path : '/AlgoViz',
-        element : <Layout/>,                // whenever a user navigates to any URL starting with /AlgoViz, the Layout component will be rendered.
+        element : <Layout/>,            // whenever a user navigates to any URL starting with /AlgoViz, the Layout component will be rendered.
         children : [
           {
             path : '/AlgoViz',
@@ -50,19 +50,19 @@ function App() {
           },
           {
             path : '/AlgoViz/sortingVisualizer',
-            element : <SortingVisualizer></SortingVisualizer>
+            element : <RotateScreen><SortingVisualizer/></RotateScreen>
           },
           {
             path : '/AlgoViz/dataStructureVisualizer',
-            element : <DataStructureVisualizer></DataStructureVisualizer>
+            element : <RotateScreen><DataStructureVisualizer/></RotateScreen>
           },
           {
             path : '/AlgoViz/pathFindingVisualizer',
-            element : <PathFindingVisualizer></PathFindingVisualizer>
+            element : <RotateScreen><PathFindingVisualizer/></RotateScreen>
           },
           {
             path : '/AlgoViz/myAlgorithm',
-            element : <MyAlgorithm></MyAlgorithm>
+            element : <RotateScreen><MyAlgorithm/></RotateScreen>
           },
           {
             path : '/AlgoViz/discussion',
@@ -82,7 +82,8 @@ function App() {
     
     return (
       <div className='app'>
-          <RouterProvider router={router}/>       
+          <RouterProvider router={router}/> 
+               
       </div>
     )
   }
