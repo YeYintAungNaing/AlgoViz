@@ -45,8 +45,8 @@ export default function Login() {
         <h2>Welcome To AlgoViz</h2>
         <span>Do not have an account?</span>
         <span>Click the button below to register instead</span>
-      </div>         
         <Link className="link" to='/AlgoViz/register'><button className="submit-button">Register</button></Link>
+      </div>          
     </div>
   </div>
   </div>

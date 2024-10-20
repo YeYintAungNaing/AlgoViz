@@ -1,10 +1,11 @@
-import { useState } from "react"
+import {  useState } from "react"
 import './DataStructure.scss'
  
 function DataStructureVisualizer() {
 
   const [isAnimating, setIsAnimating] = useState(false)
   const [currentDs, setCurrentDs] = useState('stack')
+  
   const [message, setMessage] = useState('')
   const [numbers, setNumbers] = useState([12, 14, 44, 23])
   const [tempElement, setTempElement] = useState(null)
@@ -13,7 +14,7 @@ function DataStructureVisualizer() {
   const MAX_STACK_SIZE = 8;
   const BLOCK_WIDTH = 50;
 
-const MAX_QUEUE_SIZE = 8;
+  const MAX_QUEUE_SIZE = 8;
 
 
   const stackExplanation = [
@@ -25,6 +26,16 @@ const MAX_QUEUE_SIZE = 8;
     ]
   ]
 
+  const queueExplanation = [
+    'A queue is a linear data structure that follows the First In, First Out (FIFO) principle. This means that the first element added to the queue is the first one to be removed. Queues are commonly used in programming scenarios where order matters, such as in task scheduling, handling requests in web servers, or breadth-first search algorithms.',
+    [
+      'Enqueue: Insert an element at the rear (end) of the queue. If the queue is full (reaches its size limit), the enqueue operation results in a queue overflow.',
+      'Dequeue: The element at the front (beginning) of the queue is removed. If the queue is empty, the dequeue operation results in a queue underflow.',
+      'Peek: The element at the front of the queue is accessed, allowing you to see the oldest addition without modifying the queue.'
+    ]
+  ]
+
+  const [explanation, setExplanation] = useState(stackExplanation)
 
 
   function generateNumbers(e) {
@@ -41,10 +52,12 @@ const MAX_QUEUE_SIZE = 8;
     const value = e.target.value;
     if (value === 'stack') {
       setCurrentDs('stack')
+      setExplanation(stackExplanation)
       
     } 
     else if (value === 'queue') {
       setCurrentDs('queue')
+      setExplanation(queueExplanation)
      
     }
     setNumbers([12, 14, 44, 23])
@@ -237,9 +250,9 @@ const MAX_QUEUE_SIZE = 8;
       <div className="explanation-container">
         <div className='explanation'>
           <h1>{currentDs && currentDs}</h1>
-          <p>{stackExplanation[0]}</p>
+          <p>{explanation[0]}</p>
           {
-          stackExplanation[1].map((operation, i) => (
+          explanation[1].map((operation, i) => (
             <div className="DS-operation" key={i}>{operation}</div>
           ))
           }

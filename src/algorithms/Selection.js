@@ -5,21 +5,20 @@
 export function selectionSort(array) {
     let swapHistory = [];
     for (let i = 0; i < array.length-1 ;  i++) {
-        let minNum = array[i]
+        let minNum = array[i]   
         let minIndex = i  
-        for (let j = i; j < array.length - 1; j++) {
-            if (minNum > array[j+1]) {
-                swapHistory.push([minIndex,j+1, false])
-                minNum = array[j+1]
-                minIndex = j + 1
-            }
-            else{
-                swapHistory.push([minIndex, j+1, false]) 
+        for (let j = i + 1; j < array.length ; j++) {
+            swapHistory.push([minIndex,j, false])
+            if (minNum > array[j]) {  
+                minNum = array[j]
+                minIndex = j 
             }
         }
-        swapHistory.push([i, minIndex, true])
-        array[minIndex] =  array[i]
-        array[i] = minNum
+        if (minIndex !== i) {    // only swap when the minvalue is changed
+            swapHistory.push([i, minIndex, true])
+            array[minIndex] =  array[i]
+            array[i] = minNum   // swap the min with the number of current iteration
+        }
     }
     return swapHistory
     //return array

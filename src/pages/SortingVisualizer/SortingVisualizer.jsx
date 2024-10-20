@@ -42,17 +42,17 @@ function SortingVisualizer() {
   //console.log('rendered')
 
 
-  useEffect(()=>{
-    if (currentAlgo === 'BubbleSort') {
-      setExplanation([bubbleSortSteps, bubbleSortcodeSnippet])
-    }
-    else if (currentAlgo === 'SelectionSort') {
-      setExplanation([selectionSortSteps, selectionSortCodeSnippet])
-    }
-    else if (currentAlgo === 'InsertionSort') {
-      setExplanation([insertionSortSteps, insertionSortCodeSnippet])
-    }
-  }, [currentAlgo])
+  // useEffect(()=>{
+  //   if (currentAlgo === 'BubbleSort') {
+  //     setExplanation([bubbleSortSteps, bubbleSortcodeSnippet])
+  //   }
+  //   else if (currentAlgo === 'SelectionSort') {
+  //     setExplanation([selectionSortSteps, selectionSortCodeSnippet])
+  //   }
+  //   else if (currentAlgo === 'InsertionSort') {
+  //     setExplanation([insertionSortSteps, insertionSortCodeSnippet])
+  //   }
+  // }, [currentAlgo])
 
   
   useEffect(() => {
@@ -133,6 +133,7 @@ function SortingVisualizer() {
       setIsAnimating(true)
       setMessage(`Bubble Sort is running`)
       setCurrentAlgo('BubbleSort')
+      setExplanation([bubbleSortSteps, bubbleSortcodeSnippet])
       let copyArray = array.slice()
       let swapHistory = bubbleSort(copyArray)  
       //console.log(swapHistory)
@@ -163,6 +164,7 @@ function SortingVisualizer() {
     setIsAnimating(true)
     setMessage(`Selection sort is running`)
     setCurrentAlgo('SelectionSort')
+    setExplanation([selectionSortSteps, selectionSortCodeSnippet])
     let copyArray = array.slice()
     let swapHistory = selectionSort(copyArray)  
     animateSorting(swapHistory, copyArray, 'Selection Sort')  
@@ -174,6 +176,7 @@ function SortingVisualizer() {
     setIsAnimating(true)
     setMessage(`Insertion sort is running`)
     setCurrentAlgo('InsertionSort')
+    setExplanation([insertionSortSteps, insertionSortCodeSnippet])
     let copyArray = array.slice()
     let swapHistory = insertionSort(copyArray)  
     //console.log(swapHistory)
