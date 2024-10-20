@@ -30,14 +30,16 @@ export const selectionSortCodeSnippet = `
 for (let i = 0; i < array.length-1 ;  i++) {
         let minNum = array[i]
         let minIndex = i  
-        for (let j = i; j < array.length - 1; j++) {
-            if (minNum > array[j+1]) {
-                minNum = array[j+1]
-                minIndex = j + 1
+        for (let j = i + 1; j < array.length ; j++) {
+            if (minNum > array[j]) {
+                minNum = array[j]
+                minIndex = j 
             }
         }
-        array[minIndex] =  array[i]
-        array[i] = minNum
+         if (minIndex !== i) {   
+            array[minIndex] =  array[i]
+            array[i] = minNum   
+        }
 }`
 
 export const selectionSortSteps = [

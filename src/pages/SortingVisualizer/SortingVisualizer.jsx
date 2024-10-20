@@ -96,6 +96,10 @@ function SortingVisualizer() {
     //   return
     // }
     const numberArray = userArray.split(',').map(num => Number(num));
+    if (numberArray.length < 2){
+      setMessage('Array must have at least 2 elements')
+      return
+    }
     for (let num of numberArray) {
       if (num > 340) {
         setMessage('Interger must be smaller than 340')

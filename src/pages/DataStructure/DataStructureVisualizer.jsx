@@ -83,6 +83,14 @@ function DataStructureVisualizer() {
 
   async function handlePush(e, newValue) {
     e.preventDefault();
+    if (newValue > 999) {
+      setMessage('Only 3 digits are allowed')
+      return
+    }
+    if (newValue.length > 3) {
+      setMessage('Only 3 characters are allowed')
+      return
+    }
     setIsAnimating(true)
     if (numbers.length < MAX_STACK_SIZE) {
       setTempElement(newValue);   
@@ -131,6 +139,15 @@ function DataStructureVisualizer() {
 
   async function handleEnqueue(e, newValue) {
     e.preventDefault();
+    if (newValue > 999) {
+      setMessage('Only 3 digits are allowed')
+      return
+    }
+    if (newValue.length > 3) {
+      setMessage('Only 3 characters are allowed')
+      return
+    }
+       
     if (numbers.length < MAX_QUEUE_SIZE) {
       setIsAnimating(true);
       const targetIndex = numbers.length;  
